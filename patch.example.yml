@@ -1,0 +1,16 @@
+# dsh-memory-container v0.5.0 挂载示例
+# 使用前把插件目录链接进 profile 的 node_modules，并替换 containerRoot。
+- insert:
+    - id: memory-container
+      name: 'dsh-memory-container'
+      config:
+        containerRoot: '/absolute/path/to/harness_memory_container'
+        injectPersona: true
+        personaMode: full
+        searchTopK: 5
+        searchArchive: false
+        hotMaxChars: 16000
+        workspaceId: ''
+        projectId: ''
+        apiPrefix: /api/memory
+        allowEdit: false

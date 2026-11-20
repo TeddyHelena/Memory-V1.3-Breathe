@@ -1,0 +1,95 @@
+{
+  "_comment": "零调用点白名单：每条必须写 reason。空 = 全部必须清掉。",
+  "allow": [
+    {
+      "file": "src/index.ts",
+      "name": "name",
+      "reason": "插件对外契约：宿主按此名加载（Cordis 约定），引用方在宿主，不在本仓"
+    },
+    {
+      "file": "src/index.ts",
+      "name": "inject",
+      "reason": "插件对外契约：声明依赖的服务（Cordis 约定）"
+    },
+    {
+      "file": "src/index.ts",
+      "name": "Config",
+      "reason": "插件对外契约：宿主用它的 schema 校验配置"
+    },
+    {
+      "file": "src/index.ts",
+      "name": "apply",
+      "reason": "插件对外契约：宿主调用入口"
+    },
+    {
+      "file": "src/client/index.ts",
+      "name": "NS",
+      "reason": "客户端 bundle 对外契约：宿主按此命名空间挂设置页"
+    },
+    {
+      "file": "src/client/index.ts",
+      "name": "inject",
+      "reason": "客户端 bundle 对外契约：声明 slots/locale 依赖"
+    },
+    {
+      "file": "src/client/index.ts",
+      "name": "apply",
+      "reason": "客户端 bundle 对外契约：宿主调用入口"
+    },
+    {
+      "file": "src/injection.ts",
+      "name": "CHANNEL_CONTRACT",
+      "reason": "契约表本体：生产经 auditContract() 的默认参数引用；导出面服务单测直连（测重名/缺项判据）"
+    },
+    {
+      "file": "src/injection.ts",
+      "name": "cacheUnit",
+      "reason": "判据一的『可执行文档』：刻意不进生产调用路径 —— 它存在的意义是让『按 section 算成本』这种错法在代码评审里一眼可见"
+    },
+    {
+      "file": "src/injection.ts",
+      "name": "validateDeclaration",
+      "reason": "判据二的『可执行文档』（验收用）：评审/验收时人工调用，本来就不该在运行期路径上"
+    },
+    {
+      "file": "src/session-buffer.ts",
+      "name": "normalizeForMatch",
+      "reason": "内部归一化函数：生产经 findQuote 内部引用，导出面服务单测直连"
+    },
+    {
+      "file": "src/vault-registry.ts",
+      "name": "parseRegistryMarkdown",
+      "reason": "内部解析函数：生产经 loadVaultRegistry 内部引用，导出面服务单测直连"
+    },
+    {
+      "file": "src/contract/fields.ts",
+      "name": "INDEX_ONLY_FIELDS",
+      "reason": "契约表本体：索引独有字段（file）的白名单，供 J5 闭环测试用（『索引里除它以外都必须在注册表里』这条判据的反例清单）。生产不直接引用它，但它是那条闭环判据的一半。"
+    },
+    {
+      "file": "src/decay-sweep.ts",
+      "name": "readIntents",
+      "reason": "【L4-B2 · 2026-10-15 核实后改判：判据口，不是'第二条门'】候选清单 B2 原判它是'生产走 readJsonlTolerant、测试走它 ⇒ 同一件事两扇门'。**核实后前提不成立**：① 它的真身就是 `readJsonlTolerant(path.join(root, INTENT_FILE)).rows` —— 与生产（307/340/341 行）**字面上同一个表达式**；② 它 2026-10-14 由 486c50d 引入时**就是薄包装**，从来没有过自己的实现 ⇒ 不存在'判据走别的代码路径'的风险；③ 测试唯一的**读**断言走它（写夹具时才直接碰文件，那是造数据不是判据）。⇒ 删它只会逼测试自己解析 JSONL（**那才会造出真正的第二扇门**）。故保留，并如实标注为面向判据的薄口。"
+    },
+    {
+      "file": "src/decay-log.ts",
+      "name": "projectionFingerprint",
+      "reason": "【L4 步①·判据口】投影指纹 —— 施工单最硬那条判据（「从日志重建的投影 == 盘上投影，逐字节」）的**比对入口**。生产不直接调它，但它是那条判据的一半（另一半在 test/decay-log.test.mjs）。"
+    },
+    {
+      "file": "src/decay-log.ts",
+      "name": "serializeRecord",
+      "reason": "【L4·日志行唯一序列化口】appendLog 内部用它，测试也用它造样本 ⇒ 扫描器只认「文件外调用」，故登记。"
+    },
+    {
+      "file": "src/decay-log.ts",
+      "name": "parseLog",
+      "reason": "【L4·容错解析口】readLog 内部用它，测试也用它验「坏行必须报出来（含行号）」⇒ 登记。"
+    },
+    {
+      "file": "src/decay-log.ts",
+      "name": "SWEEP_LOG_FILE",
+      "reason": "【L4·日志的唯一地址】文件名常量：appendLog / readLog / 测试共用一处，⛔ 不许各处自己拼字符串（那就是「两个真源」的起点）。"
+    }
+  ]
+}

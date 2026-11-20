@@ -1,0 +1,88 @@
+{
+  "name": "dsh-memory-container",
+  "version": "0.16.3+breathe.1119.2",
+  "description": "MemoryV1.3-Breathe + UI: local memory container (B1 + four-lens UI + identity/packaging)",
+  "private": true,
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('lib', { recursive: true, force: true })\"",
+    "build": "npm run clean && npm run build:host && npm run build:client && npm run build:ui",
+    "build:host": "tsc -p tsconfig.json",
+    "build:client": "tsc -p tsconfig.client.types.json && tsdown",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.client.json",
+    "test": "node --test test/*.test.mjs",
+    "verify": "npm run build && npm run typecheck && npm test && npm run scan:dead && npm run check-doc-refs -- --glob \"docs/*.md\"",
+    "watch": "tsdown --watch",
+    "scan:dead": "node scripts/dead-exports.mjs",
+    "aliveness": "node scripts/aliveness-check.mjs",
+    "sandbox": "rolldown src/client/sandbox.tsx --format iife --platform browser --file lib/sandbox.js --name Sandbox",
+    "shoot": "npm run sandbox && node scripts/shoot-prototype.mjs && node scripts/shoot-sandbox.mjs && node scripts/shoot-wake.mjs && node scripts/check-wizard.mjs && node scripts/check-client-wiring.mjs",
+    "client-refresh": "bash scripts/client-refresh.sh",
+    "e2e:decay": "node scripts/decay-e2e.mjs",
+    "shoot-wake": "npm run sandbox && node scripts/shoot-wake.mjs",
+    "check-wizard": "npm run sandbox && node scripts/check-wizard.mjs",
+    "audit-growth": "node scripts/audit-growth.mjs",
+    "check-client-wiring": "node scripts/check-client-wiring.mjs",
+    "decay-status": "node scripts/decay-status.mjs",
+    "lite-baseline": "node scripts/lite-baseline.mjs",
+    "check-doc-refs": "node scripts/check-doc-refs.mjs",
+    "injection-bytes": "node scripts/injection-bytes.mjs",
+    "probe": "node scripts/breathe-probes.mjs",
+    "build:ui": "node scripts/copy-ui.mjs"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/dsh-tools": ">=0.1.0-rc.5",
+    "@deepseek-ai/schemastery": "*"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2",
+    "@deepseek-ai/dsh-client-locale": "0.1.7-rc.2",
+    "@deepseek-ai/dsh-client-runtime": "0.1.0-rc.8",
+    "@deepseek-ai/dsh-client-ui-layout": "0.1.7-rc.2",
+    "@deepseek-ai/dsh-client-ui-settings": "0.1.7-rc.2",
+    "@deepseek-ai/dsh-client-ui-sidebar": "0.1.7-rc.2",
+    "@deepseek-ai/dsh-client-ui-slots": "0.1.7-rc.2",
+    "@deepseek-ai/dsh-tools": "0.1.7-rc.2",
+    "@deepseek-ai/schemastery": "^3.18.4",
+    "@types/node": "^22.20.1",
+    "@types/react": "^18.3.24",
+    "@types/react-dom": "18.3.7",
+    "react": "^18.3.1",
+    "react-dom": "18.3.1",
+    "tsdown": "^0.22.2",
+    "typescript": "^5.6.3",
+    "unrun": "^0.3.1"
+  },
+  "dsh": {
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-layout",
+        "@deepseek-ai/dsh-client-ui-sidebar"
+      ],
+      "platform": "web"
+    },
+    "profile": {
+      "bundles": []
+    }
+  }
+}
