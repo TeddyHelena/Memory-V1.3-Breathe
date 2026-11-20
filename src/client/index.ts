@@ -86,7 +86,7 @@ export function apply(ctx: ClientContext): void {
 
   const panelInjected = (): MemoryPanelInjected => injected
 
-  // ⛔ 旧的「设置 → 插件 → 记忆」页签**已删除**（Teddy 2026-10-10："老的记忆页面在内置插件
+  // ⛔ 旧的「设置 → 插件 → 记忆」页签**已删除**（作者 2026-10-10："老的记忆页面在内置插件
   // 那里面的记忆页面还没有删除呢"）。主面板接管全部入口；设置页那份是上一代实现，
   // 与主面板并存会变成**两个真源**（同一份数据两套渲染、两套行为）。
   // 想找回它：git show <旧提交>:src/client/MemoryTab.tsx
@@ -94,7 +94,7 @@ export function apply(ctx: ClientContext): void {
   // ── 【C-2】侧边栏条目 + 整屏主面板 ────────────────────────────────────────
   // 两个座位用**同一个 id / key = 'memory' 配对**：宿主按 `main` 的 key 选中面板，
   // 侧边栏负责画按钮并从 list 元数据里解析 label（我们只出图标内容 —— 见诉求书 §二）。
-  // ⛔ 设置页签**保留**（Teddy 拍）：两个入口不冲突，主面板是"用"，设置页是"查"。
+  // ⛔ 设置页签**保留**（作者 拍）：两个入口不冲突，主面板是"用"，设置页是"查"。
   ctx.slots.inject('sidebar.panellist', () => ctx.slots.register({
     name: 'sidebar.panellist',
     id: 'memory',

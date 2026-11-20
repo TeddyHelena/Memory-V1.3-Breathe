@@ -3,7 +3,7 @@
  *
  * ## 这一版为什么重写
  * 上一版我是"看着像"自己编的（栅格比例自定、圆角 10、卡片靠 `border:1px` 立起来…），
- * Teddy 一眼看出不对：「你好好看一下那个 html 里面关于 Agent 页面的具体参数包括风格」。
+ * 作者 一眼看出不对：「你好好看一下那个 html 里面关于 Agent 页面的具体参数包括风格」。
  * 现按原型**逐项对照**重做。真值（⛔ 改之前先回原型核对，别凭印象调）：
  *
  * | 项 | 原型真值 |
@@ -137,15 +137,15 @@ export function MemoryPanel({ list, graph: graphApi, tiers: tiersApi, chain: cha
   const [graphFailed, setGraphFailed] = useState(false)
   const [tiers, setTiers] = useState<Record<string, string>>({})
   const [chainData, setChainData] = useState<import('./types-client.ts').MemoryChainData | null>(null)
-  // 【第3轮】首启向导：**面板内覆盖层**，⛔ 不做成"必须先过的启动页"（Teddy 裁决）；
+  // 【第3轮】首启向导：**面板内覆盖层**，⛔ 不做成"必须先过的启动页"（作者 裁决）；
   // 读不到状态 ⇒ 不弹（`/onboarding` 的 needed 已按四种情形判过，含"读不到⇒不弹"）
   const [showWizard, setShowWizard] = useState(false)
   // 【小刀③】人格锚点区默认只列 3 条（11 条会顶满左卡、把球挤扁）⇒ 可展开
 
-  // 【Teddy 第3点】胶囊里的头像**可以由用户自己传图**（原型：头像 / 可跳过 / 上传）。
+  // 【作者 第3点】胶囊里的头像**可以由用户自己传图**（原型：头像 / 可跳过 / 上传）。
   // 落点是 H2 的 `/identity`（`avatar` 存 dataURL）—— 通道早就通了，之前只画了个大脑占位。
   const [identity, setIdentity] = useState<{ avatar?: string; name?: string; callName?: string; gender?: string } | null>(null)
-  // 【Teddy】点头像右边的**名字** ⇒ 就地出现「名字 + 性别」的编辑（落 `/identity`）
+  // 【作者】点头像右边的**名字** ⇒ 就地出现「名字 + 性别」的编辑（落 `/identity`）
   const [idEdit, setIdEdit] = useState(false)
   // 【B6】衰减扫描状态：面板那行「今天自动归档 M 条 · 撤销」
   const [decay, setDecay] = useState<{ lastCount: number; rolledBack: boolean } | null>(null)
@@ -354,7 +354,7 @@ export function MemoryPanel({ list, graph: graphApi, tiers: tiersApi, chain: cha
       {/* 【B8】把 TL 的时长**写进 CSS 变量**（规格第 2 条：⛔ 不许在 CSS 里写死秒数，
           否则"TL 和 CSS 各写各的 ⇒ 时间线错位"—— 原型为此专门写过注释）。 */}
       <style>{`:root{--fx-slide:${TL.slide}ms}`}</style>
-      {/* 【Teddy 指令】「把边框线去掉，卡片仅保留阴影」。
+      {/* 【作者 指令】「把边框线去掉，卡片仅保留阴影」。
           那个"边框"来自 `--elev-panel` 的**第一段**：`0 0 0 .5px rgba(0,0,0,.10)` ——
           一个 0.5px 的**描边环**（+ 后面两段柔和阴影）。宿主 token `--dsw-elevation-panel`
           我们改不了，所以在自己的层里**只换阴影**：去掉描边环，保留其余两段。
@@ -415,7 +415,7 @@ export function MemoryPanel({ list, graph: graphApi, tiers: tiersApi, chain: cha
                 必须是**构造出来的**，不是两份各自写、改一处就错位（原型为这事专门留过注释）。*/}
             <div style={{ position: 'absolute', left: WAKE_LANDING.capsule.left, top: WAKE_LANDING.capsule.top, display: 'flex', alignItems: 'center', gap: 10, background: T.bg, boxShadow: T.elev2, borderRadius: 999, padding: `${WAKE_LANDING.pad}px 14px ${WAKE_LANDING.pad}px ${WAKE_LANDING.pad}px` }}>
               {/* 头像：有图就显示图；点它换图（原型：头像 / 可跳过 / 上传）。⛔ 没图才回落到大脑占位 */}
-              {/* 【Teddy】头像与名字**同一个入口**：点胶囊里任意一处 ⇒ 开同一个身份面板（头像 + 名字 + 性别）。
+              {/* 【作者】头像与名字**同一个入口**：点胶囊里任意一处 ⇒ 开同一个身份面板（头像 + 名字 + 性别）。
                   原来头像是"点图直接弹文件选择器"、名字是"点字弹面板"，两个入口分散 ⇒ 合并。 */}
               <span
                 title='点头像 / 名字，改头像 · 名字 · 性别'
@@ -444,10 +444,10 @@ export function MemoryPanel({ list, graph: graphApi, tiers: tiersApi, chain: cha
             </div>
           </div>
 
-          {/* 【2026-10-10 Teddy】人格锚点区**不要了** —— 这块是我自己加的（C-3 第 1/2 问的实现），
+          {/* 【2026-10-10 作者】人格锚点区**不要了** —— 这块是我自己加的（C-3 第 1/2 问的实现），
               他看了实机说"这部分不要了" ⇒ 整块删除。锚点仍在「热」层里按 hot_order 展示（列表默认就落热层），
               🔒 只读也仍在抽屉里。⛔ 不要再自己加回来。 */}
-          {/* 【Teddy】身份编辑面板：点胶囊里的**头像或名字**出现，三件齐 —— 头像 / 名字 / 性别。
+          {/* 【作者】身份编辑面板：点胶囊里的**头像或名字**出现，三件齐 —— 头像 / 名字 / 性别。
               落 H2 的 `/identity`（avatar / name / gender 都在白名单里）⇒ 与原来同一条通道。
               ⚠️ 这块之前**没落进源码**（我的脚本 replace 没匹配上却照样报"已加"）——
                  所以"点了名字没反应"。现在带断言重写。 */}

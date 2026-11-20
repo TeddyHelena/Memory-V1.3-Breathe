@@ -92,12 +92,12 @@ export function classifyDecayType(input: ClassifyInput): DecayType {
   }
   if (input.operation === 'update' && input.inherited) return input.inherited
   if (input.operation === 'propose') return 'process'
-  // ⛔ **默认值暂时维持 recent**（Teddy 已拍要改 process，但改下去会让 3 条测试红 —— 见下）。
+  // ⛔ **默认值暂时维持 recent**（作者 已拍要改 process，但改下去会让 3 条测试红 —— 见下）。
   // 阻塞原因（真耦合，不是测试写错）：判重键 `dupTitleKey(标题, decay_type)` **把 decay_type 算进去了**
   //   ⇒ 改默认 = 改判重行为（同一标题的两条可能从"判重"变成"不判重"）。
   // 这是**静默行为变更**，必须先想清楚再改；已记入 `docs/RELEASE-BLOCKERS.md` 的 B10。
   // 备好的改法：把这里换成 `return 'process'`，并按新口径更新 test/writer-ingest-wiring + backfill-decay。
-  // 【Teddy 2026-10-10 拍】默认 **process（快衰）**：
+  // 【作者 2026-10-10 拍】默认 **process（快衰）**：
   // "我们的其实大部分的信息其实都属于是快衰信息，最起码是要进入到这个里面的"。
   // ✅ 前置已就位：① `fresh.ts` 的 HALF_LIFE_BY_DECAY 让类型**真的**影响衰减速度；
   //                ② 判重键已改成**只看标题** ⇒ 改默认**不再**偷偷改判重行为（这是先前撤回的原因）。
@@ -190,7 +190,7 @@ export function contentFingerprint(text: string): string {
  * 别人项目那条的 `last_accessed` / `access_count`（跨项目写入痕迹）。
  * 修复后：**同一性**用 `policy.sameScope`（⛔ 不是 `isInScope`，那是可见性）——
  *   同一 scope ⇒ 吸收；跨 scope 撞同文 ⇒ **不合并**，只回一条 `content_other_scope` 提示，
- *   已拍口径见 `policy.sameScope` 注释（Teddy 2026-10-08：跨 scope 不合并）。
+ *   已拍口径见 `policy.sameScope` 注释（作者 2026-10-08：跨 scope 不合并）。
  */
 export interface DupCandidate {
   id: string
@@ -248,7 +248,7 @@ export function findDuplicate(
 }
 
 /**
- * 【L3-A1 · 2026-10-15 · Teddy 拍**删**】`pickPool` 已删（原 14 行，见下）。
+ * 【L3-A1 · 2026-10-15 · 作者 拍**删**】`pickPool` 已删（原 14 行，见下）。
  *
  * 删的三条依据（齐了才敢删）：
  *   ① **零引用** —— 全仓只有它自己 + 死导出白名单（连测试都没用）

@@ -7,7 +7,7 @@ export declare function memoryScope(entry: {
  * 【S2 · P1-5】作用域的**同一性**判据 —— 与 `isInScope`（可见性）严格分开。
  *
  * 判重问的是"这是不是同一个项目里的同一条"，**不是**"我能不能看见它"。
- * 口径（Teddy 2026-10-08 拍板）：**跨 scope 不合并**——
+ * 口径（作者 2026-10-08 拍板）：**跨 scope 不合并**——
  *   · 两边都 global ⇒ 同一
  *   · 两边同 scope 且 scope_id 相同 ⇒ 同一
  *   · 其余（含 global ↔ project、project A ↔ project B）⇒ **不同一**：

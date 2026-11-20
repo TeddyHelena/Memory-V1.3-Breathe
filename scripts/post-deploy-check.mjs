@@ -153,7 +153,7 @@ if (live) {
   const b = d.build
   add('① 构建身份读数存在', b && typeof b === 'object', b ? '是（data.build）' : '读数缺失')
   if (b && typeof b === 'object') {
-    add('① 盘上 = 进程内（未陈旧）', b.stale === false, `loaded=${b.loadedHash} ／ disk=${b.diskHash}${b.stale ? '  ⇒ 改了代码没重启。**动作人：Teddy**（重启宿主）｜ Helena 已检测并报告' : ''}`)
+    add('① 盘上 = 进程内（未陈旧）', b.stale === false, `loaded=${b.loadedHash} ／ disk=${b.diskHash}${b.stale ? '  ⇒ 改了代码没重启。**动作人：作者**（重启宿主）｜ 助手 已检测并报告' : ''}`)
     add('① 构建清单无缺失项', (b.missing?.length ?? -1) === 0, `files=${b.files} ／ missing=${JSON.stringify(b.missing ?? [])}`)
     add('① 启动时刻有留痕', typeof b.loadedAt === 'string' && b.loadedAt.length > 0, `${b.loadedAt}`)
   }
@@ -290,7 +290,7 @@ add('② 无作用域漂移', scopeDrift.length === 0, `${scopeDrift.length} 处
 const tagIndex = buildInvertedTagIndex(index.entries)
 const ctx = { container, config: DEFAULT_ROUTE_CONFIG, tagIndex, scopeContext: {} }
 const leaked = new Set()
-for (const q of ['记忆', '系统', '版本', '项目', '任务', 'Helena', '协作', '模板', '配置', '文档']) {
+for (const q of ['记忆', '系统', '版本', '项目', '任务', '助手', '协作', '模板', '配置', '文档']) {
   for (const s of directed(ctx, q)) if (!scopeAllowsMeta(s.meta, ctx.scopeContext)) leaked.add(s.meta.id)
 }
 add('② 跨作用域读泄漏不可复现', leaked.size === 0, leaked.size ? `仍然泄漏：${[...leaked].join(',')}` : '10 个查询全部干净')

@@ -20,9 +20,9 @@ const mk = (id: string, layer: MemoryEntryMeta['layer'], title: string, status: 
 })
 
 const ENTRIES: MemoryEntryMeta[] = [
-  mk('h01', 'hot', 'Teddy 事实锚点-核心', 'active', 'recent', ['人格', '锚点'], 98),
+  mk('h01', 'hot', '作者 事实锚点-核心', 'active', 'recent', ['人格', '锚点'], 98),
   mk('h02', 'hot', '称呼方式', 'active', 'recent', ['人格'], 95),
-  mk('h03', 'hot', 'Helena 身份核心', 'active', 'recent', ['人格', '身份'], 96),
+  mk('h03', 'hot', '助手 身份核心', 'active', 'recent', ['人格', '身份'], 96),
   mk('p20', 'longterm', '跨层常驻样例', 'active', 'core', ['常驻'], 90),
   mk('l44', 'longterm', '窗口壳修复·点叉后台运行', 'active', 'recent', ['Harness', '窗口'], 70, '2026-08-31'),
   mk('l57', 'longterm', '容器多写入通道一致性教训', 'active', 'recent', ['容器', '教训'], 80, '2026-09-14'),
@@ -36,7 +36,7 @@ const LIST: MemoryListData = {
   entry_count: ENTRIES.length, hot_order: ['h01', 'h02', 'h03'], allowEdit: true, entries: ENTRIES,
 }
 
-/** 故意带**表格 + 粗体**：正好验"渲染器支不支持表格"那条（Teddy 当场抓过） */
+/** 故意带**表格 + 粗体**：正好验"渲染器支不支持表格"那条（作者 当场抓过） */
 const CONTENT = `# 事实锚点
 
 | 项 | 内容 |

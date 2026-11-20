@@ -120,7 +120,7 @@ export declare function contentFingerprint(text: string): string;
  * 别人项目那条的 `last_accessed` / `access_count`（跨项目写入痕迹）。
  * 修复后：**同一性**用 `policy.sameScope`（⛔ 不是 `isInScope`，那是可见性）——
  *   同一 scope ⇒ 吸收；跨 scope 撞同文 ⇒ **不合并**，只回一条 `content_other_scope` 提示，
- *   已拍口径见 `policy.sameScope` 注释（Teddy 2026-10-08：跨 scope 不合并）。
+ *   已拍口径见 `policy.sameScope` 注释（作者 2026-10-08：跨 scope 不合并）。
  */
 export interface DupCandidate {
     id: string;
@@ -158,7 +158,7 @@ selfScope?: {
     scope_id?: string;
 }): DupHit | null;
 /**
- * 【L3-A1 · 2026-10-15 · Teddy 拍**删**】`pickPool` 已删（原 14 行，见下）。
+ * 【L3-A1 · 2026-10-15 · 作者 拍**删**】`pickPool` 已删（原 14 行，见下）。
  *
  * 删的三条依据（齐了才敢删）：
  *   ① **零引用** —— 全仓只有它自己 + 死导出白名单（连测试都没用）

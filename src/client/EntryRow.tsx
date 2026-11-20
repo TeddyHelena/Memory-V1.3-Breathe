@@ -151,7 +151,7 @@ export function EntryRow({ entry, tier, open, onToggle, onEdit, getEntry, reloca
     finally { setBusy(null) }
   }, [entry.id, onChanged])
 
-  // 【Teddy 口径】陈旧 = 超过半衰期 ⇒ fresh < 0.5；图例那句「半透明 陈旧」现在有实现了
+  // 【作者 口径】陈旧 = 超过半衰期 ⇒ fresh < 0.5；图例那句「半透明 陈旧」现在有实现了
   const stale = typeof entry.fresh === 'number' && entry.fresh < 0.5
 
   return (

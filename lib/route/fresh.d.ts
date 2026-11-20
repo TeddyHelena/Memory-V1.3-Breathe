@@ -30,14 +30,14 @@ export declare const FRESH_PARAMS: FreshParams;
  * **按衰减类型给半衰期** —— 这是"快衰"三个字该有的行为差异。
  *
  * 体检（2026-10-10）发现：原来 `decay_type` **完全不参与半衰期** ⇒ core/recent/process
- * 三者衰减速度一模一样 ⇒ "快衰"只是个标签。Teddy 的判断（"大部分信息其实属于快衰"）
+ * 三者衰减速度一模一样 ⇒ "快衰"只是个标签。作者 的判断（"大部分信息其实属于快衰"）
  * 要能落地，前提就是**这里得先分开**。
  *
- * 口径（Teddy 2026-10-10 拍「超过半衰期」+「B：陈旧⇒自动降层」的延伸）：
+ * 口径（作者 2026-10-10 拍「超过半衰期」+「B：陈旧⇒自动降层」的延伸）：
  *   · core    —— 人格锚点类，**不衰减**（`Infinity`）
  *   · process —— 快衰：**7 天**
  *   · recent  —— 常规：**30 天**（默认口径不变）
- * ⛔ 改这三个数 = 改产品行为，先跟 Teddy 说。
+ * ⛔ 改这三个数 = 改产品行为，先跟 作者 说。
  */
 export declare const HALF_LIFE_BY_DECAY: Record<string, number>;
 /** 取某个 decay_type 的半衰期（天）；未标 / 未知 ⇒ 按 recent（30 天） */
@@ -89,20 +89,20 @@ export declare const E3_WEIGHTS: {
 };
 /**
  * 打分配置里"是否用真 fresh"的开关（接线用）。
- * ⛔ 默认 false：不改变行为，直到 Teddy 亲口批准部署（E3 施工单 §二-3）。
+ * ⛔ 默认 false：不改变行为，直到 作者 亲口批准部署（E3 施工单 §二-3）。
  */
 export declare const FRESH_WIRING_DEFAULT = false;
 /**
  * **一处算 fresh**（`/list` 与 `/graph` 共用 —— ⛔ 不许两份实现，否则哪天口径改了必分叉）。
  *
- * 契约（Teddy 拍）：陈旧 ⇔ `fresh < 0.5` ⇔ 超过半衰期；半衰期按 decay_type 分（`HALF_LIFE_BY_DECAY`）。
+ * 契约（作者 拍）：陈旧 ⇔ `fresh < 0.5` ⇔ 超过半衰期；半衰期按 decay_type 分（`HALF_LIFE_BY_DECAY`）。
  * ⚠️ `core` 必须**在调 `freshOf` 之前短路**：它是"不衰减"，而 `freshOf` 对非有限 H 是**抛错**的——
  *    2026-10-10 实测：把 `Infinity` 喂进去 ⇒ 只要有 1 条 core，`/list` 整条挂掉（HTTP 400）。
  * ⚠️ 缺 / 非法 `last_accessed` ⇒ **不猜，就不动**（返回 `FRESH_WHEN_UNKNOWN`），理由见下。
  */
 export declare function freshForEntry(lastAccessed: string | undefined, decayType: string | undefined, nowMs?: number): number;
 /**
- * **缺 / 非法 `last_accessed` 时的落点**（2026-10-11 定，⛔ 改这个数 = 改产品行为，先跟 Teddy 说）。
+ * **缺 / 非法 `last_accessed` 时的落点**（2026-10-11 定，⛔ 改这个数 = 改产品行为，先跟 作者 说）。
  *
  * 旧口径是"按很旧算（拿半衰期本身当经过了多久）"，注释还写着「缺失算陈旧（安全侧，宁可不留）」——
  * 实测对不上，而且是**随 decay_type 两种结果**：

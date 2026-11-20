@@ -67,7 +67,7 @@ export function EntryDrawer({ id, getEntry, updateEntry, onClose, onChanged }: E
   const [detail, setDetail] = useState<MemoryEntryDetail | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  // 【Teddy】抽屉原来"突然出现"——因为组件是**挂/卸**，没有过渡可播。
+  // 【作者】抽屉原来"突然出现"——因为组件是**挂/卸**，没有过渡可播。
   // 做法：挂载时先不带 `open`（原型里 = translateX(102%)，停在屏外），**下一帧**再加 ⇒
   // 浏览器就能播原型那条 `transition: transform .22s`（滑出而不是弹出）。
   const [shown, setShown] = useState(false)

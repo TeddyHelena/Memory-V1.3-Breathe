@@ -117,7 +117,7 @@ export const FIELD_REGISTRY: readonly FieldSpec[] = [
    *   · 陈旧判定吃的是 `last_accessed`（`route/fresh.ts` 的 `freshForEntry`），⛔ 不是 `updated`。
    * 它真实的**决策**用途只有一个：索引指纹（`container.ts` `indexFingerprintOf` 的 `id|file|updated`）
    * ⇒ 指纹变 ⇒ 清文档/语料缓存。其余是**展示面**（面板「更新日期」）。
-   * Teddy 2026-10-16 拍：「`updated` 只做元数据，不参与决策」——与上面这条实测一致。
+   * 作者 2026-10-16 拍：「`updated` 只做元数据，不参与决策」——与上面这条实测一致。
    */
   { name: 'updated', mirror: 'mirror', rule: RULE_MIRROR_READ_PATH, why: '展示面（面板更新日期）+ 索引指纹（id|file|updated）；⛔ 不参与排序/陈旧/衰减判定' },
   { name: 'summary', mirror: 'mirror', rule: RULE_MIRROR_READ_PATH, absence: 'legacy', why: '摘要注入形态（hot_mode=summary）与列表副标题' },
@@ -134,7 +134,7 @@ export const FIELD_REGISTRY: readonly FieldSpec[] = [
 
   // ── 时间状态（R1）──────────────────────────────────────────────
   /**
-   * 【L2-T2 · 2026-10-15 · Teddy 拍 A / A2】**`status` 有两义**：
+   * 【L2-T2 · 2026-10-15 · 作者 拍 A / A2】**`status` 有两义**：
    *   ① **人工标记到期**（`status='expired'`）—— ⚠️ 这是**第二个到期来源**（与时间边界并列）；
    *   ② **只读溯源**（`active` / `superseded`）。
    * ⛔ **但"判到期"只准 `temporalState` 一个函数做**（唯一判定出口）——
@@ -145,7 +145,7 @@ export const FIELD_REGISTRY: readonly FieldSpec[] = [
   { name: 'status', mirror: 'mirror', rule: RULE_MIRROR_READ_PATH, defaultWhenAbsent: 'active', why: '**人工标记到期 + 只读溯源**（⛔ 判到期只准 `temporalState`，其他决策点不得问）；缺省语义即 active' },
   { name: 'valid_from', mirror: 'mirror', rule: RULE_MIRROR_READ_PATH, why: 'temporal_state 的 future 判定' },
   /**
-   * 【L2-T1 · 2026-10-15 · Teddy 拍 · **2026-10-15 修方向**】**`valid_to` 为正、`expires` 降为只读别名。**
+   * 【L2-T1 · 2026-10-15 · 作者 拍 · **2026-10-15 修方向**】**`valid_to` 为正、`expires` 降为只读别名。**
      * ⛔ **本行曾把方向写反**：原文写"`expires` 为正"，与**同一段的理由**
      * （"引擎现状就是 `valid_to ?? expires`"）**互斥** —— 若真按"`expires` 为正"，就得**改引擎优先级**，
      * 那就不叫"与现实同向/最小迁移"了。**是独立审稿（fresh eyes）抓出来的**（它指出本行与施工稿

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * repair-tombstone-titles.mjs —— 存量墓碑脱敏（一次性修复，2026-10-07 Teddy 授权）
+ * repair-tombstone-titles.mjs —— 存量墓碑脱敏（一次性修复，2026-10-07 作者 授权）
  *
  * ── 为什么要单独一个脚本 ────────────────────────────────────────────
  * S1（MemoryV1.2-Sealed）修的是"**往后不再产生**"：新写入的墓碑标题是中性标识、

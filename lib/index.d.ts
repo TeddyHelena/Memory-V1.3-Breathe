@@ -109,7 +109,7 @@ declare const Config: z<Schemastery.ObjectS<NoInfer<{
      *
      * 为什么要有：扫描触发点此前**只有"宿主启动"** ⇒ 宿主连着开几天，那几天**一次都不扫**
      * （条目不会丢、只会继续变老，但退场会积压）。
-     * ⛔ 为什么**不挂在请求上**：Teddy 拍过「**不在请求路径里改数据**」（请求是读的时刻）。
+     * ⛔ 为什么**不挂在请求上**：作者 拍过「**不在请求路径里改数据**」（请求是读的时刻）。
      *    定时自检不违背那条 —— 写盘时刻仍然**有界**：每进程最多每 10 分钟问一次，
      *    **真写只在换日之后发生一次**（闸门唯一权威 `runDueSweep` 判的）。
      */
@@ -137,7 +137,7 @@ declare const Config: z<Schemastery.ObjectS<NoInfer<{
     autoPromote: z<boolean, boolean, "defined">;
     /**
      * 【E3】是否把**真 fresh**（会话内轮次钟）接进打分。默认取 `fresh.ts` 的常量（当前 false）。
-     * ⛔ 默认不开：接线会改变排序，必须经 Teddy 亲口批准才开（见 E3 窄口径施工单）。
+     * ⛔ 默认不开：接线会改变排序，必须经 作者 亲口批准才开（见 E3 窄口径施工单）。
      */
     freshFromTurnClock: z<boolean, boolean, "defined">;
     /** hot 注入字符硬预算；0 表示不限制。开启动态预算时它是**上限**，实际预算可能更小 */
@@ -298,7 +298,7 @@ declare const Config: z<Schemastery.ObjectS<NoInfer<{
      *
      * 为什么要有：扫描触发点此前**只有"宿主启动"** ⇒ 宿主连着开几天，那几天**一次都不扫**
      * （条目不会丢、只会继续变老，但退场会积压）。
-     * ⛔ 为什么**不挂在请求上**：Teddy 拍过「**不在请求路径里改数据**」（请求是读的时刻）。
+     * ⛔ 为什么**不挂在请求上**：作者 拍过「**不在请求路径里改数据**」（请求是读的时刻）。
      *    定时自检不违背那条 —— 写盘时刻仍然**有界**：每进程最多每 10 分钟问一次，
      *    **真写只在换日之后发生一次**（闸门唯一权威 `runDueSweep` 判的）。
      */
@@ -326,7 +326,7 @@ declare const Config: z<Schemastery.ObjectS<NoInfer<{
     autoPromote: z<boolean, boolean, "defined">;
     /**
      * 【E3】是否把**真 fresh**（会话内轮次钟）接进打分。默认取 `fresh.ts` 的常量（当前 false）。
-     * ⛔ 默认不开：接线会改变排序，必须经 Teddy 亲口批准才开（见 E3 窄口径施工单）。
+     * ⛔ 默认不开：接线会改变排序，必须经 作者 亲口批准才开（见 E3 窄口径施工单）。
      */
     freshFromTurnClock: z<boolean, boolean, "defined">;
     /** hot 注入字符硬预算；0 表示不限制。开启动态预算时它是**上限**，实际预算可能更小 */
@@ -429,7 +429,7 @@ declare const Config: z<Schemastery.ObjectS<NoInfer<{
  * 返回的 Promise 不会被当作启动工作）。同步 apply + 内部同步加载即可。
  */
 /**
- * **token 取值（`apiToken: 'auto'` 时）—— 跨重载保持不变**（2026-10-16 · Teddy 拍）。
+ * **token 取值（`apiToken: 'auto'` 时）—— 跨重载保持不变**（2026-10-16 · 作者 拍）。
  *
  * ## 为什么（真身实测的坑）
  * 修前：每次插件 `apply` 都 `randomBytes(24)` **重新生成** ⇒

@@ -25,7 +25,7 @@ export declare const MAX_PER_SWEEP = 20;
  */
 export declare function maxPerSweepFor(poolSize: number): number;
 /**
- * ═══ 2026-10-16（Breathe）· **池内分位**（Teddy 拍「甲」）═══
+ * ═══ 2026-10-16（Breathe）· **池内分位**（作者 拍「甲」）═══
  *
  * ## 判据从"绝对阈值"改成"池内相对排名"
  * 修前：`eff < 0.5`（绝对）⇒ 同龄必同命（30 天处 `2^−1 = 0.5`，频率乘子最大是 1
@@ -67,7 +67,7 @@ export interface DecayEntryLike {
     /** 衰减类型 —— 只用于地板的半衰期换算 */
     decayType?: string;
     /**
-     * ⭐【F 投递权威表 · 2026-10-15 · Teddy 拍"A 名单赢"】**是否在册（`hot_order` 成员）**。
+     * ⭐【F 投递权威表 · 2026-10-15 · 作者 拍"A 名单赢"】**是否在册（`hot_order` 成员）**。
      *
      * 语义：**名单是「人工策展的必须留」⇒ 衰减不动它**。出口是**人工从名单移除**，⛔ 不是衰减。
      *
@@ -259,7 +259,7 @@ export interface SweepDecision {
     dayKeyMismatch: boolean;
 }
 /**
- * 【L3-B3 · 2026-10-15 · Teddy 拍**删**】`sweepDue` 已删（原 12 行）。
+ * 【L3-B3 · 2026-10-15 · 作者 拍**删**】`sweepDue` 已删（原 12 行）。
  *
  * 删的依据：
  *   ① 门禁 `scan:dead` 判它 **「无任何使用 → 整段可删」**（仅测试当 oracle）

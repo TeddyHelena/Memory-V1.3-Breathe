@@ -57,4 +57,4 @@ if (plan.moves.length) console.log(`  例：${plan.moves[0].id} → ${plan.moves
 
 console.log(`\n【④ decay_type 影响什么】半衰期：core = ∞ · process = ${halfLifeFor('process')} 天 · recent = ${halfLifeFor('recent')} 天（同会话 ${FRESH_PARAMS.halfLifeTurn} 轮）`)
 console.log('  ✅ 2026-10-10 起 decay_type **真的参与**半衰期（`HALF_LIFE_BY_DECAY`）：快衰 7 天、常规 30 天、核心不衰减')
-console.log('     ⛔ 改这三个数 = 改产品行为，先跟 Teddy 说（本条以前写过"不参与"，已作废）\n')
+console.log('     ⛔ 改这三个数 = 改产品行为，先跟 作者 说（本条以前写过"不参与"，已作废）\n')

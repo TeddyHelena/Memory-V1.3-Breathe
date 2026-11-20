@@ -163,7 +163,7 @@ export function readSweepStateEx(root: string): {
 }
 
 /**
- * **解析闸门快照：状态文件坏了就由审计兜底**（2026-10-14 · Teddy 拍"报+拦"后我改的做法）。
+ * **解析闸门快照：状态文件坏了就由审计兜底**（2026-10-14 · 作者 拍"报+拦"后我改的做法）。
  *
  * ## 为什么不直接"拦"
  * G2 报的十来类不一致里，**大多数不影响闸门** —— 判据是从**时间戳现算**的
@@ -802,7 +802,7 @@ function runSweepLocked(deps: SweepDeps): SweepResult {
 const ROLLBACK_TARGETS = new Set(['longterm'])
 
 /**
- * **回滚指定批次**（2026-10-14 新增 · Teddy 拍「干吧」）。
+ * **回滚指定批次**（2026-10-14 新增 · 作者 拍「干吧」）。
  *
  * ## 为什么必须有它（我列过的第 4 条架构债）
  * 修前只有 `rollbackLastBatch`，写死"最近一批" ⇒ 一旦新扫描产生下一批，

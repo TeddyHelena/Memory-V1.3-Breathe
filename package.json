@@ -1,6 +1,6 @@
 {
   "name": "dsh-memory-container",
-  "version": "0.16.3+breathe.1120",
+  "version": "0.16.3+breathe.1120.1",
   "description": "MemoryV1.3-Breathe + UI: local memory container (B1 + four-lens UI + identity/packaging)",
   "private": true,
   "type": "module",

@@ -16,7 +16,7 @@
 | `audit-growth.mjs` | `npm run audit-growth` | 【增长普查】把"这些只追加文件会不会长成债"变成**可重跑的数**。 | 1 | · | · | · |
 | `audit-ui-parity.mjs` | **按名直调** | UI 对账：**原型（真源）↔ 我们实现** 的逐项数值比对。 | · | 1 | · | 1 |
 | `audit-ui-truth.mjs` | **按名直调** | **UI 真值对账**：界面上显示的每个数，必须能在真容器数据里找到出处。 | · | 1 | · | · |
-| `audit-wiring.mjs` | **按名直调** | 「机制 ↔ 界面」挂载对账（Teddy：怀疑有些机制没挂到页面上）。 | · | 1 | · | · |
+| `audit-wiring.mjs` | **按名直调** | 「机制 ↔ 界面」挂载对账（作者：怀疑有些机制没挂到页面上）。 | · | 1 | · | · |
 | `b-red-probe.mjs` | **按名直调** | b-red-probe.mjs —— V1.3-B 先红证据（只读，跑副本） | · | 1 | · | 1 |
 | `backfill-decay-fields.mjs` | **按名直调** | backfill-decay-fields.mjs —— 存量条目衰减字段回填（V1.3-A · G2） | · | 1 | · | 1 |
 | `backfill-index.mjs` | **按名直调** | backfill-index.mjs —— 把条目 frontmatter 里的元数据回填进 index.json | · | 3 | 1 | 1 |
@@ -49,11 +49,11 @@
 | `refresh-index-summary.mjs` | **按名直调** | refresh-index-summary.mjs —— 把条目文件 frontmatter 的 summary 回填进 i | · | 1 | · | 1 |
 | `release-check.mjs` | **按名直调** | release-check.mjs —— 发布前的**版本口径一致性闸门**（S2 起） | · | 3 | 1 | 1 |
 | `repair-index-projection.mjs` | **按名直调** | repair-index-projection.mjs —— 把索引投影按唯一真源回正（2026-10-07 建 · 202 | · | 1 | 1 | 1 |
-| `repair-tombstone-titles.mjs` | **按名直调** | repair-tombstone-titles.mjs —— 存量墓碑脱敏（一次性修复，2026-10-07 Teddy 授 | · | 2 | · | 1 |
+| `repair-tombstone-titles.mjs` | **按名直调** | repair-tombstone-titles.mjs —— 存量墓碑脱敏（一次性修复，2026-10-07 作者 授 | · | 2 | · | 1 |
 | `repair-v12-fields.mjs` | **按名直调** | repair-v12-fields.mjs —— 把索引里的 V1.2 五字段回填进条目文件（一次性修复） | · | 1 | · | 1 |
 | `scan-title-leaks.mjs` | **按名直调** | scan-title-leaks.mjs —— 存量标题泄漏扫描（**只读，不改任何数据**） | · | 2 | · | 1 |
 | `search-latency-probe.mjs` | **按名直调** | search-latency-probe.mjs —— 检索延迟台子：稳定态 vs 写后首检 | · | 2 | 2 | 2 |
-| `shoot-prototype.mjs` | `npm run shoot` | 原型截图台 —— Teddy 2026-10-10 教的办法： | 1 | · | 1 | · |
+| `shoot-prototype.mjs` | `npm run shoot` | 原型截图台 —— 作者 2026-10-10 教的办法： | 1 | · | 1 | · |
 | `shoot-sandbox.mjs` | `npm run shoot` | /** 拍**我们自己的面板**（沙箱页）——与 shoot-prototype.mjs 同款"验明正身"。 */ | 1 | · | 1 | · |
 | `shoot-wake-variants.mjs` | **按名直调** | 【审美术对照表】把「唤醒」特效层的**审美参数**摆出来给人挑。 | · | 1 | · | 1 |
 | `shoot-wake.mjs` | `npm run shoot`, `npm run shoot-wake` | 拍「唤醒」转场的**特效层**，并把 spec §五 第 1 点变成**像素判据**。 | 2 | · | · | · |

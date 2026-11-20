@@ -60,7 +60,7 @@ await shot('04-身份面板', 'input[placeholder="怎么称呼你"]')
 //    这就是 B9 判据第一次红的真因：脚本停在第一步，自然看不到第 2 步的选项。
 //    ⇒ 走**真实交互**：按 placeholder 填值，再点下一步。
 await page.fill('input[placeholder="你的名字，或你想让我怎么叫你"]', '天雨')
-await page.fill('input[placeholder="你想怎么叫我"]', '瑾瑾')
+await page.fill('input[placeholder="你想怎么叫我"]', '助手')
 await new Promise((r) => setTimeout(r, 300))
 await page.evaluate(() => {
   const nx = Array.from(document.querySelectorAll('button')).find((b) => b.textContent?.trim() === '下一步')

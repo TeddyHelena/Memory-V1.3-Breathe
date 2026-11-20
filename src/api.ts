@@ -422,7 +422,7 @@ export function createMemoryApi(container: MemoryContainer, opts: {
           // 【C-2 第2轮】decay_type 加进列表：Agent 页每行的 chip 行与"衰减："统计都要它。
           // 它在契约里是 mirror ⇒ 索引里就有，索引缺的旧条目才回退读文件（与上面几项同一套兜底）。
           decay_type: e.decay_type ?? file?.frontmatter.decay_type,
-          // 【Teddy 拍的口径】陈旧 = **超过半衰期** —— 与 E3 走**同一套**算法（⛔ 不另写一遍）：
+          // 【作者 拍的口径】陈旧 = **超过半衰期** —— 与 E3 走**同一套**算法（⛔ 不另写一遍）：
           //   fresh = 2^(-t/H)，H 取 FRESH_PARAMS.halfLifeDay（跨会话 30 天）；
           //   t 取 `last_accessed`（每次读取都会写，实测 112/112 有值 ⇒ 数据是活的）。
           // fresh < 0.5 ⇔ t > H ⇒ 陈旧 ⇒ 球上画半透明、行里标注。

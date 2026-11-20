@@ -40,7 +40,7 @@ export interface WakeStep {
 }
 /**
  * 节奏表（**顺序与间隔就是规格**）。
- * ⛔ 改这里 = 改仪式感，先跟 Teddy 说。
+ * ⛔ 改这里 = 改仪式感，先跟 作者 说。
  */
 export declare function wakeSchedule(speed?: 1): WakeStep[];
 export interface WakeHandle {
