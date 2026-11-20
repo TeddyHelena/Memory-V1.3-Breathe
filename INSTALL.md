@@ -13,9 +13,9 @@ CONTAINER="$HOME/Documents/Obsidian Vault/00_记忆系统/dsh-memory-container"
 ## 1. 验包
 
 ```bash
-shasum -a 256 MemoryV1.3-Breathe-1119.2.zip
-cat MemoryV1.3-Breathe-1119.2.zip.sha256   # 两值必须一致
-unzip -q MemoryV1.3-Breathe-1119.2.zip -d /tmp/breathe-install
+shasum -a 256 MemoryV1.3-Breathe-1120.zip
+cat MemoryV1.3-Breathe-1120.zip.sha256   # 两值必须一致
+unzip -q MemoryV1.3-Breathe-1120.zip -d /tmp/breathe-install
 ls /tmp/breathe-install   # 应见 lib/ src/ package.json
 ```
 
