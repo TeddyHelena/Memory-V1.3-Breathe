@@ -3109,9 +3109,9 @@ $$('#g-rel .chip').forEach(c=>c.onclick=()=>{S.rel=c.dataset.v;
   function id(){ try{ return window.__MEM_IDENTITY__||{}; }catch(e){ return {}; } }
   function hotTitles(){
     try{
-      return (DATA.entries||[]).filter(function(e){return e.layer==='hot';})
+      return (DATA.entries||[]).filter(function(e){return e.layer==='hot' && !/^h\d{2}$/i.test(String(e.id||''));})
         .map(function(e){return String(e.t||'');})
-        .filter(function(t){return t && !/Teddy|Helena|杨天雨|杨瑾|瑾瑾/i.test(t);})
+        .filter(Boolean)
         .slice(0,5);
     }catch(e){ return []; }
   }

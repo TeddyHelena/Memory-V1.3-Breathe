@@ -68,7 +68,7 @@ const DECAY_DAILY_CHECK_MS = 10 * 60_000
 //   ⛔ `baseline` **不动**：它的语义是「同源锚点」（登记口径原文：「锚点不随小版本动」）。
 //   ⚠️ 回滚口径照旧（见下面那处注释）：把 `productVersion` 改回上一个字符串即可，**代码无需回退**。
 //   ⚠️ 改了它 ⇒ `lib` 变 ⇒ **必须重启 DSH 才生效**（`post-deploy-check` 会报「动作人」）。
-export const PRODUCT = { package: '0.16.3+breathe.1120.1', productVersion: 'MemoryV1.3-Breathe', baseline: 'MemoryV1.3' } as const
+export const PRODUCT = { package: '0.16.3+breathe.1120.2', productVersion: 'MemoryV1.3-Breathe', baseline: 'MemoryV1.3' } as const
 import { elapsed } from './route/clock.js'
 import { boundaryPassed, computeNextBoundary, makeRevisionProbe } from './hot-invalidation.js'
 import { ERR, WriteError } from './idem.js'
@@ -2077,7 +2077,7 @@ output: {
             const names = ['小满', '阿澈', '青禾', '予安', '岚', '简', '星野', '南风', '时序', '少白']
             const vibes = ['稳一点，先听你说完', '直接，不绕弯', '安静但记得住细节', '有点锋利，能帮你拦坑', '轻快，负责把事接住']
             const titles = useHistory
-              ? container.getIndex().entries.filter((e) => e.layer === 'hot').map((e) => String(e.title || '')).filter((t) => t && !/Teddy|Helena|杨天雨|杨瑾|瑾瑾/i.test(t)).slice(0, 6)
+              ? container.getIndex().entries.filter((e) => e.layer === 'hot' && !/^h\d{2}$/i.test(String(e.id || ''))).map((e) => String(e.title || '')).filter(Boolean).slice(0, 6)
               : []
             const local = () => Array.from({ length: count }, (_, i) => ({ name: names[i % names.length], gender: '不设定', vibe: titles.length && i === 1 ? `像「${titles[0]}」这条记忆一样，先接住语境` : vibes[i % vibes.length] }))
             return { source: titles.length ? 'history+template' : 'generic', cards: local() }
