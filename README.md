@@ -39,3 +39,10 @@ npm test
 ## 许可证
 
 MIT，见 [LICENSE](LICENSE)。
+
+
+## 版权与原创声明
+
+本项目由 Yang Tianyu 原创并维护，以 MIT License 发布；第三方组件（Tabler Icons，MIT）与使用边界见 [NOTICE.md](NOTICE.md)。
+
+不使用本项目名称或作者名义为衍生品背书，不将本项目包装为他人原创作品。

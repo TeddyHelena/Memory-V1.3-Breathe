@@ -68,7 +68,7 @@ const DECAY_DAILY_CHECK_MS = 10 * 60_000
 //   ⛔ `baseline` **不动**：它的语义是「同源锚点」（登记口径原文：「锚点不随小版本动」）。
 //   ⚠️ 回滚口径照旧（见下面那处注释）：把 `productVersion` 改回上一个字符串即可，**代码无需回退**。
 //   ⚠️ 改了它 ⇒ `lib` 变 ⇒ **必须重启 DSH 才生效**（`post-deploy-check` 会报「动作人」）。
-export const PRODUCT = { package: '0.16.3+breathe.1120.2', productVersion: 'MemoryV1.3-Breathe', baseline: 'MemoryV1.3' } as const
+export const PRODUCT = { package: '0.16.3+breathe.1120.3', productVersion: 'MemoryV1.3-Breathe', baseline: 'MemoryV1.3' } as const
 import { elapsed } from './route/clock.js'
 import { boundaryPassed, computeNextBoundary, makeRevisionProbe } from './hot-invalidation.js'
 import { ERR, WriteError } from './idem.js'
