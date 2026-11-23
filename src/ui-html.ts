@@ -16,6 +16,8 @@ export function buildExactUiHtml(opts: {
   chainStore?: ChainStore
   allowEdit?: boolean
   chainUnavailableReason?: string
+  /** 首启向导是否需要的只读投影；调用方传入，渲染层当前不消费。 */
+  onboardingNeeded?: boolean
 }): string {
   const { container, subjects, ledger, token, apiPrefix, chainStore, allowEdit = false, chainUnavailableReason = '' } = opts
   const idx = container.getIndex()
@@ -35,7 +37,7 @@ export function buildExactUiHtml(opts: {
     for (const [id, mode] of r.map) tiers[id] = mode === 'summary' ? 'snapshot' : mode === 'title' ? 'outline' : mode === 'none' ? 'forgotten' : 'full'
   } catch { /* no tiers */ }
   const chainData = { subjects: subjects.list(), entrySessions: Object.fromEntries(entries.filter((e) => e.session).map((e) => [e.id, e.session])) }
-  const data = { _note: '真实容器 · exact UI', captured: new Date().toISOString(), total: entries.length, hot_order: idx.hot_order, entries, links }
+  const data = { _note: '真实容器 · exact UI', captured: new Date().toISOString(), total: entries.length, hot_order: idx.hot_order, entries, links, onboardingNeeded: opts.onboardingNeeded }
   const chainRegistry = chainStore ? { available: true, chains: chainStore.list() } : { available: false, chains: [], error: chainUnavailableReason || '链注册表不可用；为避免猜测，当前不展示未经验证的链分组。' }
 
 const CHAIN_OVERRIDE = `
@@ -129,6 +131,48 @@ if (window.__MEMORY_CHAIN__ && !(window.__MEMORY_CHAINS__ && window.__MEMORY_CHA
   if (end < 0) throw new Error('UI DATA object malformed')
   const bridge = `
 <script>
+/* 【2026-11-22 · 失败必须可见】任何 /api/memory/ 的非 2xx 或网络错误都在页面顶部弹一条失败条。
+   修前实测：注入 500 后页面只是"少了几块东西"——头像没了、"最近写入"退回旧值，一句提示都没有。
+   ⛔ 不许把"数据没来"渲染成"数据就是这样"。 */
+(function(){
+  function bar(msg){
+    try{
+      var id='dsh-fail-bar';
+      var el=document.getElementById(id);
+      if(!el){
+        el=document.createElement('div'); el.id=id;
+        el.style.cssText='position:fixed;left:0;right:0;top:0;z-index:2147483647;background:#b3261e;color:#fff;font:13px/1.5 -apple-system,BlinkMacSystemFont,sans-serif;padding:6px 12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer';
+        el.title='点击关闭';
+        el.onclick=function(){ el.remove() };
+        (document.body||document.documentElement).appendChild(el);
+      }
+      el.textContent=msg+' ｜ 页面上的数据可能是旧的（点此关闭）';
+    }catch(e){}
+  }
+  window.__MEMORY_FAIL__ = bar;
+  var of = window.fetch ? window.fetch.bind(window) : null;
+  if(!of) return;
+  window.fetch = function(input, init){
+    var url = String(input && input.url ? input.url : input);
+    if(url.indexOf('/api/memory/') < 0) return of(input, init);
+    return of(input, init).then(function(r){
+      if(!r.ok){
+        bar('接口失败 HTTP ' + r.status + '：' + url.replace(location.origin,''));
+      } else {
+        /* 200 但 body 不是合法 JSON（坏响应/被中间件改写）——r.json() 会在调用方抛，
+           那条路径没有任何人接 ⇒ 必须在这里也报出来。用 clone() 旁路校验，不动原流。 */
+        var ct = (r.headers && r.headers.get && r.headers.get('content-type')) || '';
+        if(ct.indexOf('json') >= 0){
+          try{ r.clone().text().then(function(t){ try{ JSON.parse(t) }catch(e){ bar('接口返回的不是合法 JSON：' + url.replace(location.origin,'')) } }, function(){}) }catch(e){}
+        }
+      }
+      return r;
+    }, function(e){
+      bar('接口不可达：' + url.replace(location.origin,''));
+      throw e;
+    });
+  };
+})();
 window.__MEMORY_BRIDGE__ = (function(){
   const H = {'x-memory-token': ${JSON.stringify(token)}, 'content-type': 'application/json'};
   const go = (path, init={}) => fetch(${JSON.stringify(apiPrefix)} + path, Object.assign({headers:H}, init)).then(r=>r.json()).then(j=>{ if(j && j.ok) setTimeout(()=>location.reload(), 80); return j; });

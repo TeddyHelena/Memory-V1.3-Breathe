@@ -11,4 +11,6 @@ export declare function buildExactUiHtml(opts: {
     chainStore?: ChainStore;
     allowEdit?: boolean;
     chainUnavailableReason?: string;
+    /** 首启向导是否需要的只读投影；调用方传入，渲染层当前不消费。 */
+    onboardingNeeded?: boolean;
 }): string;

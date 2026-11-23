@@ -279,6 +279,7 @@ export declare class MemoryContainer {
     load(options?: {
         verify?: boolean;
         repairProjection?: boolean;
+        persistRepairs?: boolean;
     }): ContainerIndex;
     /**
      * 索引写盘的乐观锁（2026-10-07 加）——**防"外部修正被静默抹掉"**。

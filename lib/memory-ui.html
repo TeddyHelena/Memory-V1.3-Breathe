@@ -41,8 +41,13 @@
     VERSION: VERSION,
     canPersist: canPersist,
     seen: seen,
-    /** 需不需要走一遍（业务事实） */
-    needed: function(){ return seen() !== VERSION; },
+    /** 需不需要走一遍（业务事实）：服务端给的 truthful 状态优先 */
+    needed: function(){
+      try {
+        if (typeof DATA !== 'undefined' && DATA && typeof DATA.onboardingNeeded === 'boolean') return DATA.onboardingNeeded;
+      } catch(e){}
+      return seen() !== VERSION;
+    },
     /** **该不该自动弹**：需要 + 存得住。存不住时不自动弹，免得每次打开都弹。 */
     autoShow: function(){ return this.needed() && canPersist; },
     mark: function(){ try { localStorage.setItem(KEY, VERSION); } catch(e){} },
@@ -3211,7 +3216,17 @@ function handoff(){
   /* 把用户在「认识一下」里填的身份送给 Agent 卡片。
      同一个页面，直接给就行 —— 不用 URL 参数、不用 localStorage（那条路走过，在沙箱里会抛）。 */
   if (window.__setCard) window.__setCard({ name:S.name, avatar:S.avatar, gender:S.gender });
-  try { if (window.__MEMORY_BRIDGE__ && window.__MEMORY_BRIDGE__.identity) window.__MEMORY_BRIDGE__.identity({ name:S.name, callName:S.user||'', gender:S.gender||'', relation:S.rel||'', avatar:S.avatar||'' }); } catch(e){}
+  /* 【2026-11-22 修 · 头像被向导清空】服务端的合并语义是「空串 = 删除字段」，
+     而向导状态里的 S.avatar 起始是 null（没从服务端加载）⇒ 只要走一遍向导，
+     就会把**已有头像**以空串覆盖掉（实测：Helena 的头像 155,819 字节被清空）。
+     ⇒ 没选新头像就**根本不带这个键**，让服务端保留原值。 */
+  try {
+    if (window.__MEMORY_BRIDGE__ && window.__MEMORY_BRIDGE__.identity) {
+      var _idp = { name:S.name, callName:S.user||'', gender:S.gender||'', relation:S.rel||'' };
+      if (S.avatar) _idp.avatar = S.avatar;
+      window.__MEMORY_BRIDGE__.identity(_idp);
+    }
+  } catch(e){}
   if (window.__wake){ window.__wake(); return; }        // 走「唤醒」转场
   $('#handoff').classList.add('on');                     // 兜底：转场不可用才回到转圈
   /* ⛔ 不跳转：DSH 的预览窗口会拦掉页面自导航。改成同页切视图。 */

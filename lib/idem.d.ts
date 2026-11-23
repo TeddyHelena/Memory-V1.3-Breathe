@@ -84,8 +84,7 @@ export declare function confirmFields(operator: string, now?: Date): {
  * 与 `confirmFields` 的区别：迁移**不改 status**（那是"转正"的语义，这里只是换个存放层），
  * 所以只写 `updated` 与 `operator` 两项留痕 —— 迁移是**审计链上的一件事**，必须留得下。
  */
-export declare function relocateFields(operator: string, now?: Date): {
-    updated: string;
+export declare function relocateFields(operator: string): {
     operator: string;
 };
 /** 写入前置校验：memory_type 必须合法，title 非空，content 非空 */

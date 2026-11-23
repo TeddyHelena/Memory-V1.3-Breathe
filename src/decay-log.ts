@@ -140,6 +140,10 @@ export function replay(records: readonly DecayLogRecord[]): {
   const order: string[] = []
   const movedByTxnId = new Map<string, { from: string; to: string }>()
   const rolledBackKeys = new Set<string>()
+  // 【性能修 · 2026-11-22】archivedAll 去重原本用 Array.includes ⇒ O(n²)。
+  // 2 万条归档时 replay 要 300ms+，而它被 readAudit/listRollbackBatches 每次调用都走一遍。
+  // 改成 Set 去重、数组保持首次出现顺序（语义与 includes 版逐字一致）。
+  const archivedSeen = new Set<string>()
 
   for (let i = 0; i < records.length; i++) {
     const r = records[i] as DecayLogRecord
@@ -228,7 +232,7 @@ export function replay(records: readonly DecayLogRecord[]): {
         p.lastMoved = typeof r.moved === 'number' ? r.moved : 0
         p.lastAutoAt = typeof r.lastAutoAt === 'number' ? r.lastAutoAt : null
         if (Array.isArray(r.archived)) {
-          for (const id of r.archived) if (!p.archivedAll.includes(id)) p.archivedAll.push(id)
+          for (const id of r.archived) if (!archivedSeen.has(id)) { archivedSeen.add(id); p.archivedAll.push(id) }
         }
       }
     }

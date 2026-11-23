@@ -27,7 +27,7 @@
  */
 import z from '@deepseek-ai/schemastery';
 export declare const PRODUCT: {
-    readonly package: "0.16.3+breathe.1119.1";
+    readonly package: "0.16.3+breathe.1120.4";
     readonly productVersion: "MemoryV1.3-Breathe";
     readonly baseline: "MemoryV1.3";
 };

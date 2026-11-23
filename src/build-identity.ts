@@ -23,32 +23,66 @@ import path from 'node:path'
  */
 
 /**
- * 运行期真正会被加载的那批产物。**顺序固定** ⇒ 哈希可比（⛔ 不许改成动态遍历）。
+ * 运行期真正会被加载的那批产物：**`lib/` 下全部 `.js`（递归、按路径排序）**。
  *
- * ⚠️ **不导出**：它只服务本模块。测试要验它，就**拿真实 `lib/` 当夹具** ——
- *    抄一份清单到测试里必然分叉（实测：抄的那份写着 `ingestion.js`，真名是 `ingest.js`，
- *    于是模块漏哈希而单测全绿）。
+ * 【2026-11-22 修正 · 血的事实】修前这里是一张**手写的 18 文件清单**，
+ * 而 `lib/` 实际有 **57** 个 `.js` —— `api.js` / `lock.js` / `decay-sweep.js` /
+ * `subjects.js` / `idem.js` / `chain-render.js` 全在清单外。
+ * 后果：改这些文件、重新构建，`diskHash` **一点不动** ⇒ `stale` 永远 `false` ⇒
+ * 系统拍胸脯说"盘上与进程内是同一份"，其实它根本没看那些文件。
+ * 实测：当天修 `idem.ts`（搬层不改 updated）后哈希仍是 `5fd4298d`，只能靠手工 grep 才敢确认。
+ *
+ * ⛔ 原注释写"不许改成动态遍历"，理由是"顺序必须固定才能比较"——
+ *    这个理由对**无序 readdir** 成立，对**排序后的路径列表**不成立。
+ *    现在：递归收集 + `sort()`，两个进程在同一棵树上必然得到同一个顺序。
+ * ⛔ 唯一的排除项是**浏览器侧 bundle**（不参与进程加载，不存在"进程内陈旧"）。
  */
-const BUILD_FILES = [
-  'index.js',
-  'container.js',
-  'writer.js',
-  'persona.js',
-  'policy.js',
-  'search.js',
-  'ingest.js',
-  'injection.js',
-  'injection-ledger.js',
-  'hot-invalidation.js',
-  'build-identity.js',
-  'checksum.js',
-  'contract/fields.js',
-  'route/router.js',
-  'route/recall.js',
-  'route/score.js',
-  'route/budget.js',
-  'route/gate.js',
-] as const
+const BROWSER_ONLY = new Set(['client.js', 'sandbox.js'])
+
+const MANIFEST = 'build-manifest.json'
+
+/** 构建清单里"应该有"的模块（缺失/损坏 ⇒ 返回空，退化成只看盘上实际文件） */
+function manifestFiles(libDir: string): string[] {
+  try {
+    const j = JSON.parse(fs.readFileSync(path.join(libDir, MANIFEST), 'utf-8')) as { files?: unknown }
+    return Array.isArray(j.files) ? j.files.filter((f): f is string => typeof f === 'string') : []
+  } catch { return [] }
+}
+
+/** 盘上实际的运行期产物（递归 + 排序；纯读） */
+function presentFiles(libDir: string): string[] {
+  const out: string[] = []
+  const walk = (dir: string, prefix: string): void => {
+    let names: string[]
+    try { names = fs.readdirSync(dir) } catch { return }
+    for (const name of names.sort()) {
+      const rel = prefix ? `${prefix}/${name}` : name
+      const full = path.join(dir, name)
+      let st: fs.Stats
+      try { st = fs.statSync(full) } catch { continue }
+      if (st.isDirectory()) { walk(full, rel); continue }
+      if (!name.endsWith('.js')) continue
+      if (BROWSER_ONLY.has(rel)) continue
+      out.push(rel)
+    }
+  }
+  walk(libDir, '')
+  return out.sort()
+}
+
+/**
+ * 参与哈希的模块 = **清单应有** ∪ **盘上实际**（排序后）。
+ *   · 并集而不是二选一：新增文件要能影响哈希（否则"多出一个模块"永远判不出 stale）；
+ *   · 清单里有、盘上没有 ⇒ 进 `missing`（构建失败/产物丢失要如实暴露，不许静默）。
+ */
+function runtimeBuildFiles(libDir: string): { files: string[]; missing: string[] } {
+  const expected = manifestFiles(libDir)
+  const present = presentFiles(libDir)
+  const presentSet = new Set(present)
+  const missing = expected.filter((f) => !presentSet.has(f)).sort()
+  const files = [...new Set([...expected, ...present])].sort()
+  return { files, missing }
+}
 
 export interface BuildHash {
   /** 内容哈希前 16 位（sha256） */
@@ -62,9 +96,11 @@ export interface BuildHash {
 /** 给一个 lib 目录算构建哈希。纯读，无副作用。**不导出**：唯一调用方是本模块与真身验收。 */
 function computeBuildHash(libDir: string): BuildHash {
   const h = crypto.createHash('sha256')
-  const missing: string[] = []
+  const { files: list, missing: missingFromManifest } = runtimeBuildFiles(libDir)
+  const missing: string[] = [...missingFromManifest]
   let files = 0
-  for (const rel of BUILD_FILES) {
+  for (const rel of list) {
+    if (missingFromManifest.includes(rel)) continue
     try {
       const buf = fs.readFileSync(path.join(libDir, rel))
       // 文件名 + 长度 + 内容都要进哈希：只哈希内容的话，两个产物互换文件名会撞哈希

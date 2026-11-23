@@ -41,7 +41,29 @@ const dayOf = (r) => {
   }
   return ''
 }
-const days = new Set(rows.map(dayOf).filter(Boolean))
+// 【口径统一 · 2026-11-22】激活契约写的是「N 个**活跃日**」（= 有真人消息的日子），
+// 修前这里数的是**墙钟日** ⇒ 停摆一周后再开，墙钟日照样涨，基线会假装"样本够了"。
+// 现在的判据：有 `active-days.jsonl` ⇒ 只数与活跃日相交的那些天；
+// 没有账本（新容器/测试夹具）⇒ 退回墙钟日，但**在 note 里写明**，不许静默当活跃日。
+const activeDayFile = path.join(root, 'active-days.jsonl')
+let activeDays = null
+try {
+  if (fs.existsSync(activeDayFile)) {
+    activeDays = new Set()
+    for (const line of fs.readFileSync(activeDayFile, 'utf-8').split('\n')) {
+      if (!line.trim()) continue
+      try {
+        const r = JSON.parse(line)
+        if (typeof r.day === 'string' && r.day) activeDays.add(r.day)
+      } catch { /* 坏行跳过 */ }
+    }
+    if (activeDays.size === 0) activeDays = null
+  }
+} catch { activeDays = null }
+const renderDays = new Set(rows.map(dayOf).filter(Boolean))
+const days = activeDays
+  ? new Set([...renderDays].filter((d) => activeDays.has(d)))
+  : renderDays
 const chars = rows.map((r) => Number(r.chars)).filter((n) => Number.isFinite(n))
 const sorted = [...chars].sort((a, b) => a - b)
 const p = (q) => sorted.length ? sorted[Math.min(sorted.length - 1, Math.floor(q * (sorted.length - 1)))] : 0
@@ -50,11 +72,13 @@ const baseline = {
   measuredAt: new Date().toISOString(),
   source: src,
   days: days.size,
+  dayBasis: activeDays ? 'active-day' : 'wall-day',
+  ...(activeDays ? { activeDaysTotal: activeDays.size } : {}),
   rows: rows.length,
   chars: { p50: p(0.5), p90: p(0.9), max: sorted.at(-1) ?? 0 },
   frozen: days.size >= wantDays && (sorted.at(-1) ?? 0) > 0 && p(0.5) > 0,
   note: days.size < wantDays
-    ? `仅 ${days.size}/${wantDays} 天，不许冻结`
+    ? `仅 ${days.size}/${wantDays} ${activeDays ? '活跃日' : '墙钟日（无 active-days.jsonl，退用墙钟）'}，不许冻结`
     : ((sorted.at(-1) ?? 0) > 0 && p(0.5) > 0 ? '基线可冻结' : '字符数全零（baseline 无效），不许冻结'),
 }
 fs.writeFileSync(path.join(root, 'chain-render-baseline.json'), JSON.stringify(baseline, null, 2), 'utf-8')

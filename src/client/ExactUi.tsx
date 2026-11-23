@@ -80,7 +80,7 @@ export function ExactUi(): ReactNode {
       {token !== null && token !== '' && (
         <iframe
           title='记忆'
-          src={`${prefix}/ui?t=${encodeURIComponent(token)}&onboarded=0.9.0`}
+          src={`${prefix}/ui?t=${encodeURIComponent(token)}`}
           style={{
             position: 'absolute', left: -280, top: 0, width: size.w + 280, height: size.h,
             border: 0, display: 'block',
