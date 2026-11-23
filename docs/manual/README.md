@@ -4,7 +4,8 @@
 
 | 文件 | 内容 |
 |---|---|
-| `usage-guide.html` | 使用截图手册：引导、面板三视图、记忆链操作，含 `shots/` 截图 |
+| `usage-guide-standalone.html` | **推荐**：截图手册单文件版，图片已内嵌，下载一个 HTML 即可看 |
+| `usage-guide.html` | 使用截图手册（依赖 `shots/` 目录，需连同图片一起下载） |
 | `usage.html` | 文字版使用说明：记忆与记忆链 |
 | `index.html` | 配置说明书 |
 
