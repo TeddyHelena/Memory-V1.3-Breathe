@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Breathe Sandbox · 配置说明书</title>
+<style>
+:root{
+  --paper:#F5F8FC;--surface:#fff;--surface2:#EEF4FB;--ink:#0F172A;--ink2:#344054;--muted:#667085;--faint:#98A2B3;
+  --line:#DCE6F2;--line2:#EAF0F7;--blue:#2F6FED;--blue2:#1D5BD6;--blueSoft:#EDF4FF;--blueLine:#C9DCFA;
+  --green:#1F9D63;--greenSoft:#EAF7F0;--amber:#B26A00;--amberSoft:#FFF6E6;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.72 var(--font);-webkit-font-smoothing:antialiased}
+button,input{font:inherit}
+.shell{min-height:100vh;display:grid;grid-template-columns:252px minmax(0,1fr) 380px;grid-template-rows:58px 1fr}
+.top{grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:0 22px;background:rgba(245,248,252,.92);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}
+.logo{width:25px;height:25px;border-radius:7px;background:var(--blue);color:#fff;display:grid;place-items:center;font:11px var(--mono)}
+.brand{font-weight:700;font-size:13.5px;letter-spacing:.01em}
+.badge{font:9.5px var(--mono);color:var(--blue);background:var(--blueSoft);border:1px solid var(--blueLine);border-radius:999px;padding:2px 7px;letter-spacing:.06em}
+.top .sp{flex:1}.top .sandbox{font:10px var(--mono);letter-spacing:.1em;color:var(--amber);background:var(--amberSoft);border:1px solid #F0D6A8;border-radius:999px;padding:3px 8px}
+/* rail */
+.rail{border-right:1px solid var(--line);padding:22px 14px;background:#FBFDFF}
+.rail .k{font:9.5px var(--mono);letter-spacing:.14em;color:var(--faint);margin:0 8px 10px}
+.rail button{width:100%;display:flex;align-items:center;gap:10px;padding:9px 9px;border:0;background:none;border-radius:8px;text-align:left;color:var(--muted);cursor:pointer;font-size:12.5px}
+.rail button:hover{background:var(--surface2)}
+.rail button.on{background:var(--blueSoft);color:var(--ink)}
+.rail .n{font:10px var(--mono);color:var(--faint);width:18px}.rail button.on .n{color:var(--blue)}
+.rail .done .n{color:var(--green)}
+.rail .foot{font-size:11px;color:var(--faint);line-height:1.7;margin:22px 8px 0;border-top:1px solid var(--line);padding-top:12px}
+/* main */
+.main{padding:34px 42px 60px;min-width:0}
+.eyebrow{font:9.5px var(--mono);letter-spacing:.14em;color:var(--blue);text-transform:uppercase}
+h1{font-size:28px;line-height:1.2;letter-spacing:-.035em;margin:8px 0 6px;font-weight:700}
+.lead{font-size:13.5px;color:var(--muted);margin:0 0 20px;max-width:52em}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:0 12px 30px -28px rgba(15,23,42,.3)}
+.card h2{font-size:16px;margin:0 0 4px;letter-spacing:-.01em}
+.card p{font-size:12.5px;color:var(--muted);margin:6px 0}
+.card ul{margin:8px 0 0 19px;padding:0;font-size:12.5px;color:var(--ink2)}.card li{margin:3px 0}
+.hint{background:var(--blueSoft);border:1px solid var(--blueLine);border-radius:9px;padding:9px 11px;font-size:11.5px;color:#244A9B;margin:12px 0}
+.warn{background:var(--amberSoft);border:1px solid #F0D6A8;border-radius:9px;padding:9px 11px;font-size:11.5px;color:#6B4300;margin:12px 0}
+code{font:11px var(--mono);background:var(--surface2);border:1px solid var(--line2);border-radius:4px;padding:1px 4px}
+.pre{position:relative;background:#0F172A;border-radius:10px;padding:14px;margin:10px 0;overflow:auto;max-height:280px}
+.pre code{display:block;background:none;border:0;padding:0;color:#E6EEF8;font:10.5px/1.7 var(--mono);white-space:pre-wrap}
+.pre .copy{position:absolute;right:8px;top:8px;font:9px var(--mono);color:#C7D6EA;background:#1A2638;border:1px solid #2E3E56;border-radius:5px;padding:3px 6px;cursor:pointer}
+.pre code{color:#D7E4F3}
+.field{display:grid;gap:5px;margin:12px 0}
+.field label{font-size:11px;color:var(--muted)}.field input{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-size:12px;background:#FBFDFF;color:var(--ink);outline:none}
+.field input:focus{border-color:var(--blueLine);box-shadow:0 0 0 3px rgba(47,111,237,.08)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.checklist{display:grid;gap:6px;margin:12px 0}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--ink2);background:#FBFDFF;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.check input{margin:2px 0 0;accent-color:var(--green)}
+.check span{color:var(--muted)}
+.check b{color:var(--ink);font-weight:600}
+.navbtns{display:flex;align-items:center;gap:10px;margin-top:18px}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink2);border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer}
+.btn:hover{border-color:var(--blueLine);background:var(--blueSoft)}
+.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn.primary:hover{background:var(--blue2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.counter{margin-left:auto;font:10px var(--mono);color:var(--faint)}
+/* right preview */
+.preview{border-left:1px solid var(--line);background:#EFF4FA;padding:22px 18px;display:flex;flex-direction:column;gap:12px}
+.preview .k{font:9px var(--mono);letter-spacing:.12em;color:var(--faint)}
+.window{background:#fff;border:1px solid #CFDDEB;border-radius:11px;overflow:hidden;box-shadow:0 18px 50px -30px rgba(15,23,42,.5)}
+.bar{height:30px;display:flex;align-items:center;gap:5px;padding:0 9px;background:#FCFDFF;border-bottom:1px solid var(--line)}
+.bar i{width:6px;height:6px;border-radius:50%;background:#D5DFEA}.bar .u{margin-left:6px;font:8px var(--mono);color:var(--faint);background:#fff;border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.appbody{padding:10px;background:#F6F9FD;color:var(--ink)}
+.apphead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.apphead b{font-size:10px}.apphead span{font:7.5px var(--mono);color:var(--faint)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.stat{border:1px solid var(--line2);border-radius:6px;padding:6px;background:#fff}.stat .k{font:7px var(--mono);color:var(--faint)}.stat .v{font-size:14px;font-weight:700;letter-spacing:-.03em}.stat .s{font:7px var(--mono);color:var(--faint)}
+.list{margin-top:7px;border:1px solid var(--line2);border-radius:6px;background:#fff;padding:6px}
+.line{display:flex;justify-content:space-between;font-size:8px;color:var(--ink2);padding:4px 0;border-bottom:1px solid #F1F5F9}.line:last-child{border-bottom:0}
+.pill{font:7px var(--mono);color:var(--green);background:var(--greenSoft);border:1px solid rgba(31,157,99,.18);border-radius:999px;padding:1px 5px}
+.status{margin-top:auto;background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 10px}
+.status .t{font:9px var(--mono);letter-spacing:.1em;color:var(--faint)}.status .v{font-size:12px;font-weight:600;margin-top:3px}.status .d{font-size:10px;color:var(--muted);margin-top:1px}
+@media(max-width:1120px){.shell{grid-template-columns:220px minmax(0,1fr)}.preview{display:none}}
+@media(max-width:760px){.shell{display:block}.rail{border-right:0;border-bottom:1px solid var(--line);display:flex;gap:6px;overflow:auto;padding:10px}.rail .k,.rail .foot{display:none}.rail button{width:auto;white-space:nowrap}.main{padding:22px 18px}.row2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="top">
+    <div class="logo">M</div><div class="brand">Breathe <span style="font-weight:400;color:var(--muted)">配置说明书</span></div>
+    <span class="badge">0.16.3</span><span class="sp"></span><span class="sandbox">SANDBOX · 不写真实配置</span>
+  </header>
+
+  <aside class="rail">
+    <div class="k">STEPS</div>
+    <div id="rail"></div>
+    <div class="foot">这是交互沙箱：<br>只演示命令和配置，<br>不会改你的 DSH。</div>
+  </aside>
+
+  <main class="main">
+    <div class="eyebrow" id="eyebrow">SETUP 01</div>
+    <h1 id="title">先认识你要装的东西</h1>
+    <p class="lead" id="lead">Breathe 是 DSH 的本地记忆底座：写入、检索、注入、衰减、回滚都在本机。</p>
+    <div id="content"></div>
+    <div class="navbtns">
+      <button class="btn" id="prev">上一步</button>
+      <button class="btn primary" id="next">下一步</button>
+      <span class="counter" id="counter">01 / 06</span>
+    </div>
+  </main>
+
+  <aside class="preview">
+    <div class="k">DSH PREVIEW</div>
+    <div class="window">
+      <div class="bar"><i></i><i></i><i></i><span class="u">127.0.0.1 · DSH · 记忆</span></div>
+      <div class="appbody">
+        <div class="apphead"><b>我的记忆</b><span id="live">LOCAL</span></div>
+        <div class="stats">
+          <div class="stat"><div class="k">MEMORIES</div><div class="v">166</div><div class="s">active</div></div>
+          <div class="stat"><div class="k">ANCHORS</div><div class="v">10</div><div class="s">hot</div></div>
+          <div class="stat"><div class="k">EDGES</div><div class="v">200</div><div class="s">linked</div></div>
+        </div>
+        <div class="list">
+          <div class="line"><span>最近写入</span><span class="pill">实时</span></div>
+          <div class="line"><span>一条刚记住的事实</span><span>今天</span></div>
+          <div class="line"><span>一条带项目归属的记忆</span><span>11-14</span></div>
+          <div class="line"><span>一条等待确认的候选</span><span>pending</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="status"><div class="t">SANDBOX STATUS</div><div class="v" id="state">未开始</div><div class="d" id="stated">跟着左边走，右侧会变。</div></div>
+  </aside>
+</div>
+
+<script>
+const steps = [
+  {
+    k:'SETUP 01', title:'先认识你要装的东西',
+    lead:'Breathe 是 DSH 的本地记忆底座：写入、检索、注入、衰减、回滚都在本机。你不用懂实现，只要按顺序做。',
+    state:['未开始','准备安装','先确认三件事：DSH 能开、有安装包、有备份。'],
+    html:`<div class="card">
+      <h2>你会得到什么</h2>
+      <p>一个本地容器，加一个「记忆」插件页。插件负责把记忆写进去、读出来、定期衰减；容器就是你的数据。</p>
+      <ul>
+        <li><b>写入</b>：你说“记住…” → 正式记忆；模型推断 → 候选区。</li>
+        <li><b>读取</b>：记忆页 / 链视图 / 最近写入。</li>
+        <li><b>退场</b>：低价值记忆降层到 archive，可回滚。</li>
+      </ul>
+      <div class="hint">不需要云端账号；所有数据在本机。装坏了可以回滚，容器不会因为换插件被删。</div>
+    </div>`
+  },
+  {
+    k:'SETUP 02', title:'把包放好，先备份',
+    lead:'先备份 profile 和旧容器，再解压。不要直接覆盖旧目录。',
+    state:['已备份','准备挂载','旧配置和容器已有副本；下一步挂插件。'],
+    html:`<div class="card">
+      <h2>三条命令</h2>
+      <div class="pre"><button class="copy" data-copy="c1">复制</button><code id="c1">TS=$(date +%Y%m%d-%H%M%S)
+cp ~/.dsh/profiles/desktop/cordis.patch.yml \
+   ~/.dsh/profiles/desktop/cordis.patch.yml.bak-$TS
+mkdir -p ~/dsh-plugins
+unzip -q ~/Downloads/Memory-V1.3-Breathe-0.16.3-final-20261114.zip -d ~/dsh-plugins/</code></div>
+      <p>然后把它放到固定目录，并挂到 DSH profile：</p>
+      <div class="pre"><button class="copy" data-copy="c2">复制</button><code id="c2">mv ~/dsh-plugins/breathe-release-0.16.3 \
+   ~/dsh-plugins/dsh-memory-container-0.16.3
+ln -sfn ~/dsh-plugins/dsh-memory-container-0.16.3 \
+   ~/.dsh/profiles/desktop/node_modules/dsh-memory-container
+readlink ~/.dsh/profiles/desktop/node_modules/dsh-memory-container</code></div>
+      <div class="warn">目标已存在就先改名，不要覆盖；旧目录留着，回滚时用。</div>
+    </div>`
+  },
+  {
+    k:'SETUP 03', title:'写 profile：告诉 DSH 数据在哪',
+    lead:'只需要改一个文件。先填下面两个值，配置会自动生成。',
+    state:['配置待写','等待写入','填入容器路径后，把生成的配置贴进 profile。'],
+    html:`<div class="card">
+      <h2>你的路径</h2>
+      <div class="row2">
+        <div class="field"><label>用户名（macOS 登录名）</label><input id="user" placeholder="例如 admin" value="admin"></div>
+        <div class="field"><label>容器绝对路径</label><input id="root" placeholder="/Users/你/Documents/.../dsh-memory-container" value="/Users/admin/Documents/Obsidian Vault/00_记忆系统/dsh-memory-container"></div>
+      </div>
+      <p>把下面这段加到 <code>~/.dsh/profiles/desktop/cordis.patch.yml</code> 的 <code>- insert:</code> 段；已有 <code>memory-container</code> 就只改它的 config，不要重复插入。</p>
+      <div class="pre"><button class="copy" data-copy="c3">复制</button><code id="c3"></code></div>
+      <div class="hint">缩进必须和同级字段一致。改完先校验 YAML，再继续。</div>
+    </div>`,
+    after(){ renderYaml(); }
+  },
+  {
+    k:'SETUP 04', title:'完全重启，不是关窗口',
+    lead:'插件和配置只在启动时加载。点红叉只是回到后台。',
+    state:['配置已写','等待重启','Cmd+Q 完全退出 DSH，再重新打开。'],
+    html:`<div class="card">
+      <h2>操作</h2>
+      <ul>
+        <li>确认没有第二个 DSH 实例在写同一个容器；</li>
+        <li><b>Cmd+Q</b> 完全退出；</li>
+        <li>重新打开 DSH；</li>
+        <li>打开「记忆」插件，应该能看到记忆页。</li>
+      </ul>
+      <div class="warn">只点窗口红叉 = 应用还在后台，插件不会重新加载。</div>
+      <p>重启后如果页面 404：回上一步检查 <code>memory-container</code> 是否在 profile 里，再重启。</p>
+    </div>`
+  },
+  {
+    k:'SETUP 05', title:'验收：四项都对才算装好',
+    lead:'不要只看“能打开”。版本、扫描、写入、同日重启，四项全过。',
+    state:['运行中','验收中','跑 selftest，确认版本和每日扫描开关。'],
+    html:`<div class="card">
+      <h2>先看进程</h2>
+      <div class="pre"><button class="copy" data-copy="c4">复制</button><code id="c4">TOKEN=$(cat ~/.dsh/memory-api-token)
+curl -s -H "x-memory-token: $TOKEN" \
+  http://127.0.0.1:&lt;端口&gt;/api/memory/selftest</code></div>
+      <div class="checklist">
+        <label class="check"><input type="checkbox" data-ck><span><b>版本</b>：product.package = 0.16.3，build.stale = false</span></label>
+        <label class="check"><input type="checkbox" data-ck><span><b>扫描</b>：config_effective.decayDailyCheck = true</span></label>
+        <label class="check"><input type="checkbox" data-ck><span><b>写入</b>：说“记住：验收测试”，记忆页能看到</span></label>
+        <label class="check"><input type="checkbox" data-ck><span><b>幂等</b>：同日再重启，启动是 same-day / ran=false</span></label>
+      </div>
+      <div class="hint">端口在 DSH 窗口地址里；找不到就用 <code>lsof -iTCP -sTCP:LISTEN | grep -i dsh</code>。</div>
+    </div>`
+  },
+  {
+    k:'SETUP 06', title:'开始使用：先认识，再记事',
+    lead:'装完先走「认识一下」，再让助手记住第一条。',
+    state:['验收通过','可以使用','记忆页、链视图、候选区都可用。'],
+    html:`<div class="card">
+      <h2>三步</h2>
+      <ul>
+        <li><b>认识一下</b>：填称呼、名字、性别、关系；名字可以点“帮我抽一个”，选中只填表单，不保存。</li>
+        <li><b>记住</b>：说“记住…”进正式记忆；模型推断进候选区；没有链归属的候选留 pending。</li>
+        <li><b>看链</b>：「链」页按系统 → 项目 → 对话看归属；「最近写入」确认新条目落进来。</li>
+      </ul>
+      <div class="hint">hot/core 不自动进；写入和降层都有审计，出问题可回滚。</div>
+      <p style="margin-top:12px">回滚：切回旧 symlink + 恢复 profile 备份 + Cmd+Q，容器不动。</p>
+    </div>`
+  }
+];
+let i=0;
+const $=s=>document.querySelector(s); const rail=$('#rail');
+function yaml(){
+  const u=$('#user')?.value.trim()||'你的用户名'; const r=$('#root')?.value.trim()||'/绝对路径/dsh-memory-container';
+  return `- insert:
+    - id: memory-container
+      name: 'dsh-memory-container'
+      config:
+        containerRoot: '${r}'
+        injectPersona: true
+        personaMode: full
+        voiceFile: voice.md
+        timeZone: 'Asia/Shanghai'
+        searchTopK: 5
+        searchArchive: false
+        hotMaxChars: 16000
+        dynamicBudget: false
+        hotMinChars: 5500
+        maxHotEntries: 12
+        allowEdit: true
+        allowWrite: true
+        allowPurge: false
+        enableLexicon: true
+        verifyUserQuote: true
+        enableRoute: true
+        freshFromTurnClock: true
+        decayDailyCheck: true
+        autoPromote: true
+        apiToken: 'auto'
+        apiTokenFile: '/Users/${u}/.dsh/memory-api-token'`;
+}
+function renderYaml(){ const el=$('#c3'); if(el) el.textContent=yaml(); }
+function paint(){
+  const s=steps[i]; $('#eyebrow').textContent=s.k; $('#title').textContent=s.title; $('#lead').textContent=s.lead; $('#content').innerHTML=s.html;
+  $('#state').textContent=s.state[0]; $('#stated').textContent=s.state[2]; $('#live').textContent=(i>=5?'LIVE · LOCAL':'LOCAL');
+  $('#counter').textContent=String(i+1).padStart(2,'0')+' / '+String(steps.length).padStart(2,'0');
+  $('#prev').disabled=i===0; $('#next').textContent=i===steps.length-1?'回到第一步':'下一步';
+  $('#next').disabled = i===2 && (!$('#root')||$('#root').value.trim().length<8);
+  rail.innerHTML=steps.map((x,n)=>`<button data-i="${n}" class="${n===i?'on':''} ${n<i?'done':''}"><span class="n">${String(n+1).padStart(2,'0')}</span>${x.title}</button>`).join('');
+  rail.querySelectorAll('button').forEach(b=>b.onclick=()=>{i=+b.dataset.i;paint()});
+  $('#content').querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{const el=document.getElementById(b.dataset.copy);if(!el)return;try{await navigator.clipboard.writeText(el.innerText);const t=b.textContent;b.textContent='已复制';setTimeout(()=>b.textContent=t,1000)}catch(e){}});
+  $('#content').querySelectorAll('[data-ck]').forEach(c=>c.onchange=()=>{const all=[...document.querySelectorAll('[data-ck]')];if(all.length&&all.every(x=>x.checked)){ $('#state').textContent='验收通过'; $('#stated').textContent='四项全过，可以使用。'; }});
+  if(s.after) s.after();
+}
+$('#prev').onclick=()=>{if(i>0){i--;paint()}};
+$('#next').onclick=()=>{if(i<steps.length-1){i++;paint()}else{i=0;paint()}};
+paint();
+</script>
+</body>
+</html>

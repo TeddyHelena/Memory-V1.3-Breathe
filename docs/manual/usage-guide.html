@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Breathe 0.16.3 · 使用截图手册</title>
+<style>
+:root{
+  --paper:#F5F8FC;--surface:#fff;--surface2:#EEF4FB;--ink:#0F172A;--ink2:#344054;--muted:#667085;--faint:#98A2B3;
+  --line:#DCE6F2;--line2:#EAF0F7;--blue:#2F6FED;--blue2:#1D5BD6;--blueSoft:#EDF4FF;--blueLine:#C9DCFA;
+  --green:#1F9D63;--greenSoft:#EAF7F0;--amber:#B26A00;--amberSoft:#FFF6E6;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --font:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",-apple-system,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.7 var(--font);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:auto;padding:0 28px}
+.nav{position:sticky;top:0;z-index:20;background:rgba(245,248,252,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+.navin{height:58px;display:flex;align-items:center;gap:10px}.logo{width:24px;height:24px;border-radius:7px;background:var(--blue);color:#fff;display:grid;place-items:center;font:11px var(--mono)}
+.brand{font-weight:700;font-size:13.5px}.badge{font:9px var(--mono);color:var(--blue);background:var(--blueSoft);border:1px solid var(--blueLine);border-radius:999px;padding:2px 7px}
+.nav .sp{flex:1}.nav .h{font-size:11.5px;color:var(--muted)}
+.hero{padding:46px 0 20px}.eyebrow{font:9.5px var(--mono);letter-spacing:.14em;color:var(--blue)}
+h1{font-size:clamp(30px,4.4vw,48px);line-height:1.15;letter-spacing:-.04em;margin:10px 0 12px;font-weight:700}
+h1 em{font-style:normal;color:var(--blue)}.hero p{font-size:14px;color:var(--muted);max-width:44em;margin:0}
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;align-items:start;padding-bottom:50px}
+.steps{position:sticky;top:78px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:12px}
+.steps .k{font:9px var(--mono);letter-spacing:.12em;color:var(--faint);margin:3px 7px 8px}
+.steps button{width:100%;display:flex;gap:8px;align-items:center;border:0;background:none;text-align:left;padding:8px;border-radius:7px;color:var(--muted);font-size:12px;cursor:pointer}.steps button:hover{background:var(--surface2)}.steps button.on{background:var(--blueSoft);color:var(--ink)}
+.steps .n{font:9px var(--mono);color:var(--faint);width:17px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:13px;padding:20px 22px;box-shadow:0 12px 30px -28px rgba(15,23,42,.3)}
+.panel h2{font-size:19px;letter-spacing:-.02em;margin:0 0 4px}.panel .lead{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+.panel p{font-size:12.5px;color:var(--muted);margin:8px 0}.panel b{color:var(--ink)}
+.shot{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#EFF4FA;margin:12px 0}
+.shot img{display:block;width:100%;height:auto}
+.shot .cap{position:absolute;left:8px;bottom:8px;font:9px var(--mono);color:#33506F;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:5px;padding:3px 6px}
+.pin{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font:10px var(--mono);box-shadow:0 0 0 4px rgba(47,111,237,.18);z-index:3}
+.pin.g{background:var(--green);box-shadow:0 0 0 4px rgba(31,157,99,.16)}
+.pin.a{background:var(--amber);box-shadow:0 0 0 4px rgba(178,106,0,.14)}
+.callout{background:var(--blueSoft);border:1px solid var(--blueLine);border-radius:9px;padding:9px 11px;font-size:11.5px;color:#244A9B;margin:10px 0}
+.warn{background:var(--amberSoft);border:1px solid #F0D6A8;border-radius:9px;padding:9px 11px;font-size:11.5px;color:#6B4300;margin:10px 0}
+.chat{border:1px solid var(--line);border-radius:10px;background:#FBFDFF;padding:10px;margin:9px 0}
+.msg{max-width:92%;border-radius:9px;padding:8px 10px;font-size:12px;line-height:1.6;margin:5px 0}.me{margin-left:auto;background:var(--blue);color:#fff}.ai{background:#fff;border:1px solid var(--line);color:var(--ink2)}
+.tagrow{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.tag{font:9.5px var(--mono);border:1px solid var(--line);background:#fff;border-radius:999px;padding:3px 8px;color:var(--ink2)}
+.tag.on{background:var(--blueSoft);border-color:var(--blueLine);color:var(--blue)}
+.tbl{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}.tbl th,.tbl td{border-bottom:1px solid var(--line);padding:8px;text-align:left;vertical-align:top}.tbl th{background:var(--surface2);color:var(--ink2);font-weight:600}.tbl td{color:var(--muted)}.tbl code{font:10.5px var(--mono);background:var(--surface2);border-radius:3px;padding:1px 4px}
+.navbtns{display:flex;gap:8px;align-items:center;margin-top:14px}.btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 11px;font-size:11.5px;color:var(--ink2);cursor:pointer}.btn.p{background:var(--blue);border-color:var(--blue);color:#fff}.btn:disabled{opacity:.4;cursor:not-allowed}.count{margin-left:auto;font:9.5px var(--mono);color:var(--faint)}
+.footer{padding:20px 0 40px;font-size:11px;color:var(--faint)}
+@media(max-width:820px){.wrap{padding:0 18px}.shell{grid-template-columns:1fr}.steps{position:static;display:flex;gap:5px;overflow:auto}.steps .k{display:none}.steps button{width:auto;white-space:nowrap}.nav .h{display:none}h1{font-size:34px}.panel{padding:16px}.pin{width:18px;height:18px;font-size:9px}}
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap navin"><span class="logo">M</span><span class="brand">Breathe 使用截图手册</span><span class="badge">0.16.3</span><span class="sp"></span><span class="h">真实界面 · 示例容器</span></div></header>
+<div class="wrap hero">
+  <div class="eyebrow">USAGE · SCREENSHOT GUIDE</div>
+  <h1>点开「记忆」，<br>照着截图做。</h1>
+  <p>这不是安装说明。从把安装包和指令拖进 DSH 开始，到点哪、怎么改标签、链页怎么读；按截图照做。</p>
+</div>
+
+<div class="wrap shell">
+  <nav class="steps" id="steps"></nav>
+  <main class="content">
+    <div class="panel">
+      <h2 id="t"></h2><p class="lead" id="l"></p><div id="body"></div>
+      <div class="navbtns"><button class="btn" id="prev">上一步</button><button class="btn p" id="next">下一步</button><span class="count" id="cnt"></span></div>
+    </div>
+  </main>
+</div>
+<footer class="wrap footer">Breathe 0.16.3 · 截图来自真实界面（示例容器）· 记忆链由标签与会话共同决定，当前没有“新建链”按钮。</footer>
+
+<script>
+const steps=[
+  {
+    t:'第一步：把两个文件拖进 DSH 对话框',
+    l:'不是打开网页，是打开 DSH，把安装包和 md 直接拖进新会话。',
+    body:`<div class="shot">
+      <img src="shots/attach-files.png" alt="DSH 对话框中的两个附件">
+      <span class="pin" style="left:75%;top:17%">1</span>
+      <span class="pin g" style="left:75%;top:32%">2</span>
+      <span class="pin a" style="left:35%;top:11%">3</span>
+      <span class="cap">示意：DSH 新会话 · 两个附件</span>
+    </div>
+    <p><b>1</b> 安装包 <code>.zip</code>；<b>2</b> 安装指令 <code>.md</code>；<b>3</b> 发送「按附件安装」。</p>
+    <div class="callout">两个文件要一起拖；只给 zip 没有指令，DSH 不知道要备份、挂载、停在哪一步。</div>`
+  },
+  {
+    t:'第二步：看到“安装已就绪”，才 Cmd+Q',
+    l:'DSH 会自己备份、解压、挂 symlink、写 profile。它不会自己重启，会停下来等你。',
+    body:`<div class="shot">
+      <img src="shots/install-reply.png" alt="安装就绪回执">
+      <span class="pin g" style="left:28%;top:22%">1</span>
+      <span class="pin a" style="left:56%;top:22%">2</span>
+      <span class="cap">示意：安装完成后的回执</span>
+    </div>
+    <p><b>1</b> 它会报告备份路径和“安装已就绪”；<b>2</b> 你只需要 <b>Cmd+Q</b> 完全退出 DSH，再重新打开。</p>
+    <div class="warn">点窗口红叉只是后台运行，插件不会重新加载。必须 Cmd+Q。</div>`
+  },
+  {
+    t:'第三步：重新打开，点左上角「记忆」',
+    l:'装好后，记忆就在左侧插件栏。第一次会走「认识一下」；第二次起直接进记忆页。',
+    body:`<div class="shot">
+      <img src="shots/memory-home.png" alt="DSH 记忆页">
+      <span class="pin a" style="left:3.5%;top:18%">1</span>
+      <span class="pin" style="left:27%;top:3%">2</span>
+      <span class="pin g" style="left:25%;top:10%">3</span>
+      <span class="cap">真实 Breathe 界面 · 示例容器</span>
+    </div>
+    <p><b>1</b> 左侧插件栏点「记忆」；<b>2</b> 顶部三个镜头：记忆球 / 记忆链 / 列表；<b>3</b> 头像下面是当前容器摘要。</p>
+    <div class="callout">如果看到的是「认识一下」，说明这个版本还没走完向导；填完即可，之后不会反复弹。</div>`
+  },
+  {
+    t:'第四步：先走「认识一下」',
+    l:'第一次安装会出现这一页。填称呼、名字、性别、关系；名字可以点“帮我抽一个”。',
+    body:`<div class="shot">
+      <img src="shots/onboarding.png" alt="认识一下">
+      <span class="pin" style="left:6%;top:10%">1</span>
+      <span class="pin g" style="left:29%;top:37%">2</span>
+      <span class="pin a" style="left:42%;top:52%">3</span>
+      <span class="cap">真实「认识一下」页 · 示例</span>
+    </div>
+    <p><b>1</b> 这一步不是配置链，是先确定“我怎么称呼你 / 我叫什么”；<b>2</b> 名字/性别可以手填，也可以点「帮我抽一个」；<b>3</b> 选卡只填表单，不自动保存。</p>
+    <div class="callout">不想让抽卡参考本机身份/记忆标题，就关掉「参考本机历史」；抽卡失败会自动回退本地模板。</div>`
+  },
+  {
+    t:'第五步：点「列表」→「编辑」，链在标签里',
+    l:'链页不是设置页。要改一条记忆的归属，进列表，点这条右侧的「编辑」。',
+    body:`<div class="shot">
+      <img src="shots/memory-edit.png" alt="列表与编辑抽屉">
+      <span class="pin" style="left:2.5%;top:3%">1</span>
+      <span class="pin g" style="left:72%;top:26%">2</span>
+      <span class="pin a" style="left:94%;top:88%">3</span>
+      <span class="cap">列表 → 编辑抽屉 · 示例条目</span>
+    </div>
+    <p><b>1</b> 顶部切「列表」；<b>2</b> 标签框在这里，回车加标签，点 × 删除；<b>3</b> 右下角「保存」。</p>
+    <div class="warn">不要手改 <code>index.json</code>；不要以为改完标签链页会立刻变——保存后才生效。链页只读，回列表改标签。</div>`
+  },
+  {
+    t:'第六步：标签决定链；新建链当前没有按钮',
+    l:'当前 Breathe 只有预置链。把标签选对，链就落对；随便造新名字会进“其他”。',
+    body:`<table class="tbl"><thead><tr><th>标签</th><th>链</th></tr></thead><tbody>
+      <tr><td><code>Breathe</code></td><td>Breathe</td></tr>
+      <tr><td><code>Lite</code></td><td>Lite</td></tr>
+      <tr><td><code>Start</code></td><td>Start</td></tr>
+      <tr><td><code>Vigil / 测试 / 安全 / 方法</code></td><td>Vigil</td></tr>
+      <tr><td><code>版本 / 事故 / 决策 / 技术 / 设计 / 商业 / 需求 / 文案 / 反馈 / 法务 / 团队 / 否决 / 活动 / 归档 / 其他</code></td><td>沿革</td></tr>
+      <tr><td><code>人物 / 生活 / 本人 / 偏好 / 环境 / 身份</code></td><td>个人</td></tr>
+      <tr><td>其它 / 没标签</td><td>其他 / 史前未归</td></tr>
+    </tbody></table>
+    <div class="warn"><b>怎么新建链？当前 Breathe 没有“新建链”按钮。</b>链页只显示这 6 组预置项目；标签不在表里就落「其他」。要新增项目链，是下一版 Pulse 的链识别能力，不是用户现在能点出来的。</div>
+    <p>可用做法：选一个最接近的预置组，把标签改成它能识别的名字；不要为了“新建”去编标签或改源码。</p>`
+  },
+  {
+    t:'第七步：读链页：项目 → 环 → 条目',
+    l:'项目下面是“环”（一次对话），不是文件夹；点项目切组，点条目看全文。',
+    body:`<div class="shot">
+      <img src="shots/memory-chain.png" alt="记忆链页">
+      <span class="pin" style="left:27%;top:2%">1</span>
+      <span class="pin g" style="left:31%;top:40%">2</span>
+      <span class="pin a" style="left:61%;top:48%">3</span>
+      <span class="cap">真实记忆链页 · 项目 / 环 / 条目</span>
+    </div>
+    <p><b>1</b> 顶部镜头「记忆链」；<b>2</b> 项目与环（11-14、11-10…）；<b>3</b> 右侧是这次对话产出的条目。</p>
+    <p>项目由标签决定，环由会话决定；项目 tabs 在顶部，点一下切换。链页只读。</p>`
+  }
+];
+let i=0;const $=s=>document.querySelector(s);
+function paint(){
+  const s=steps[i];$('#t').textContent=s.t;$('#l').textContent=s.l;$('#body').innerHTML=s.body;
+  $('#cnt').textContent=String(i+1).padStart(2,'0')+' / '+String(steps.length).padStart(2,'0');
+  $('#prev').disabled=i===0;$('#next').textContent=i===steps.length-1?'回到第一步':'下一步';
+  $('#steps').innerHTML=steps.map((x,n)=>`<button data-i="${n}" class="${n===i?'on':''}"><span class="n">${String(n+1).padStart(2,'0')}</span>${x.t}</button>`).join('');
+  $('#steps').querySelectorAll('button').forEach(b=>b.onclick=()=>{i=+b.dataset.i;paint()});
+}
+$('#prev').onclick=()=>{if(i>0){i--;paint()}};
+$('#next').onclick=()=>{i=(i+1)%steps.length;paint()};paint();
+</script>
+</body>
+</html>
