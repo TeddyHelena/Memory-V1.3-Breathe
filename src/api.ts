@@ -27,6 +27,7 @@ import { buildMemoryGraph } from './graph.js'
 import { isInScope, memoryScope, temporalState } from './policy.js'
 import { listFallbackFields } from './contract/fields.js'
 import { markOnboarded, onboardingState } from './onboarding.js'
+import { seedHotAnchors } from './persona-seed.js'
 import { readIdentity, writeIdentity } from './identity.js'
 import { makeRevisionProbe } from './hot-invalidation.js'
 import type { MemoryScopeContext } from './types.js'
@@ -336,7 +337,14 @@ export function createMemoryApi(container: MemoryContainer, opts: {
       path: '/onboarding',
       handler: async (_req, res) => {
         const state = markOnboarded(root, version)
-        sendJson(res, 200, { ok: true, data: state })
+        // 首次安装完成后种 9 条 hot 人格锚点（空容器才种）
+        let seeded: unknown = null
+        try {
+          seeded = seedHotAnchors({ container, writer: opts.writer, identity: readIdentity(root) })
+        } catch (error) {
+          try { opts.log?.warn?.(`[onboarding] hot 锚点种子失败：${String(error)}`) } catch { /* ignore */ }
+        }
+        sendJson(res, 200, { ok: true, data: { ...state, seeded } })
       },
     })
 

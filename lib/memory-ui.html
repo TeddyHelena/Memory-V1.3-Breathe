@@ -1049,9 +1049,9 @@
             </div>
           </div>
           <div class="legend">
-            <span style="color:#f59e0b"><i style="background:#f59e0b"></i>热 11</span>
-            <span style="color:#3b82f6"><i style="background:#3b82f6"></i>长期 77</span>
-            <span style="color:#94a3b8"><i style="background:#94a3b8"></i>归档 18</span>
+            <span style="color:#f59e0b"><i style="background:#f59e0b"></i>热 <b id="leg-hot">0</b></span>
+            <span style="color:#3b82f6"><i style="background:#3b82f6"></i>长期 <b id="leg-longterm">0</b></span>
+            <span style="color:#94a3b8"><i style="background:#94a3b8"></i>归档 <b id="leg-archive">0</b></span>
             <span style="color:var(--text2)" title="候选是未经确认的推断，混进关系网会让「A 和 B 有关」看着像既成事实">候选不进图</span>
             <span style="color:var(--text2)">实心 活跃 · 半透明 陈旧 · <i class="hollow"></i>空心 失效</span>
             <span style="color:#f59e0b">━ 热链</span>
@@ -1093,6 +1093,9 @@
               <option value="hot">热（11）</option>
               <option value="archive">归档（18）</option>
               <option value="pending">候选（1）</option>
+            </select>
+            <select id="f-chain" title="按记忆链筛选">
+              <option value="">全部链</option>
             </select>
             <select id="f-status">
               <option value="">全部状态</option>
@@ -1677,6 +1680,22 @@ box?.addEventListener('click',e=>{
 /* ══════════════════════════════════════════════════════════════════
    四、右侧列表（v4 那套，只读）
    ══════════════════════════════════════════════════════════════════ */
+function refreshLegend(){
+  var c={hot:0,longterm:0,archive:0};
+  ALL.forEach(function(e){ if(e.layer==='hot') c.hot++; else if(e.layer==='longterm') c.longterm++; else if(e.layer==='archive') c.archive++; });
+  ['hot','longterm','archive'].forEach(function(k){ var el=$('#leg-'+k); if(el) el.textContent=c[k]; });
+}
+function refreshChainFilter(){
+  refreshLegend();
+  var sel=$('#f-chain'); if(!sel) return;
+  var reg=window.__MEMORY_CHAINS__||{};
+  var defs=reg.available===false?[]:(reg.chains||[]);
+  var cur=sel.value;
+  sel.innerHTML='<option value="">全部链</option>'+defs.map(function(c){
+    return '<option value="'+chainAttr(c.id)+'">'+chainAttr(c.name)+'</option>';
+  }).join('');
+  if (cur && defs.some(function(c){return c.id===cur;})) sel.value=cur;
+}
 function filtered(){
   /* 共享范围（三个镜头同一套）：环 > 项目 > 全部 */
   if (VIEW.ring){
@@ -1695,6 +1714,7 @@ function filtered(){
   const st=$('#f-status').value, dc=$('#f-decay').value, og=$('#f-origin').value;
   const rs=$('#f-res') ? $('#f-res').value : '';
   const q=$('#f-q').value.trim().toLowerCase();
+  const chainSel=$('#f-chain') ? $('#f-chain').value : '';
   var sortBy = $('#f-sort') ? $('#f-sort').value : 'date';
   var out = ALL.filter(e=>
     e.layer===lay &&
@@ -1709,6 +1729,7 @@ function filtered(){
   } else {
     out = out.slice().sort(function(a,b){ return (b.u||'').localeCompare(a.u||''); });
   }
+  if (chainSel) out = out.filter(function(e){ return matchedChainsOfEntry(e).some(function(c){ return c.id===chainSel; }); });
   return out;
 }
 /* ── 状态带：**现在是什么状态**，一句话说清 ──
@@ -1779,6 +1800,7 @@ function readEffect(e){
   return '被新版本取代 —— 不参与检索、不参与注入，但历史可追';
 }
 function render(){
+  refreshChainFilter();
   const rows=filtered(), host=$('#list');
   const isLT = $('#f-layer').value==='longterm';
   const LAYER_CN=CN_LAYER;
@@ -1842,7 +1864,7 @@ function focusItem(id){
   el.scrollIntoView({block:'center',behavior:'smooth'});
   setTimeout(()=>el.classList.remove('hit'),1600);
 }
-['#f-layer','#f-status','#f-decay','#f-origin'].forEach(s=>$(s).onchange=()=>{
+['#f-layer','#f-chain','#f-status','#f-decay','#f-origin'].forEach(s=>$(s).onchange=()=>{
   const lay=$('#f-layer').value;
   $('#sub').textContent = lay==='longterm' ? '记忆球 · 拖拽旋转 · 点一个点看右边' : '记忆球 · 这一版只把「长期」做细了';
   render();
@@ -2401,6 +2423,7 @@ function renderRoot(){
 
 function chainAttr(value){return safeTitle(value).replace(/&/g,'&amp;').replace(/\"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function renderChain(){
+  refreshChainFilter();
   if (!$('#ch-sys')) return;
   var registry=window.__MEMORY_CHAINS__||{};
   var status=$('#chain-status'), createButton=$('#chain-create');
@@ -2461,8 +2484,7 @@ function renderChain(){
       + 'title="三态：1 环=正交 / ≥2 环=线性 / 停下=休眠 —— 点开看规则">'+ph.t+' ▾</button></div>'
     + (VIEW.phaseOpen ? phasePanel(ph) : '')
     + '<div class="meta">'+P.count+' 个环 · '+P.n+' 条 · 最近 '+P.last
-    + '　·　state <b style="color:var(--text)">'+P.state.toFixed(3)+'</b>'
-    + '　<span style="opacity:.65">（项目 state = 子环取最大）</span></div>';
+    + '</div>';
   /* 链：小点。条数最多的一环决定点的大小，但**上下限拉开很小**，长了也放得下 */
   var maxN = Math.max.apply(null, P.ringList.map(function(r){ return r.entries.length; }));
   $('#ch-line').innerHTML = '<div class="chrow">' + P.ringList.map(function(r,i){
@@ -2552,8 +2574,17 @@ function setLens(l){
     if (btn) btn.classList.toggle('on', k === l);
   });
   if (l === 'chain') renderChain();
-  if (l === 'list')  render();
-  if (l === 'ball'){ try { resize(); } catch(e){} }
+  if (l === 'list'){
+    var sel=$('#f-chain');
+    if (sel){
+      var cur=sel.value;
+      if (!cur && VIEW.proj){ var S=CHAIN[VIEW.sys], P=S&&S.projects[VIEW.proj]; if (P&&P.chainId) cur=P.chainId; }
+      VIEW.ring=null; VIEW.proj=null; saveView();
+      if (cur) sel.value=cur;
+    }
+    render();
+  }
+  if (l === 'ball'){ refreshChainFilter(); try { resize(); } catch(e){} }
   var sub = document.getElementById('sub');
   if (sub) sub.textContent = {
     ball:'记忆球 · 拖拽旋转 · 点一个点看右边',
