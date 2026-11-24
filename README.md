@@ -1,4 +1,8 @@
-# MemoryV1.3-Breathe
+# Memory V1.3 · Breathe
+
+**Local-first, auditable and correctable AI agent memory for DeepSeek Harness (DSH).**
+
+[中文介绍](#一条记忆怎样进入上下文) · [English overview](#english-overview) · [Releases](../../releases) · [MIT License](LICENSE)
 
 **给 DeepSeek Harness 桌面端加一个本地、可审计、可纠正的个人记忆容器。** 记忆以 Markdown 和 JSON 保存在本机。你可以查看记住了什么、确认模型提出的候选记忆，也可以撤销衰减。
 
@@ -34,6 +38,14 @@ flowchart LR
 
 已有 DSH 记忆容器配置的 macOS 用户可以按 [安装指南](INSTALL.md) 下载并校验公开 ZIP、备份现有容器和 Profile，再切换插件。ZIP 已包含构建产物。
 
+## 发行证据 / Release evidence
+
+- Release: [`0.16.3+breathe.1124`](../../releases/tag/v0.16.3%2Bbreathe.1124)
+- Asset: `MemoryV1.3-Breathe-1124.zip`
+- SHA-256 (GitHub release asset metadata): `cc70cdd0aabf7df037937d0cf3e17b5db37dee89859c82d18734740125af3186`
+
+以上校验值来自 GitHub 发行资产元数据；安装前请按安装指南独立校验下载文件。
+
 ## 开发与许可
 
 源码位于 [`src/`](src/)，维护脚本索引见 [`scripts/INDEX.md`](scripts/INDEX.md)。包清单中的构建与测试脚本有各自的开发依赖，安装发布包时无需运行。
@@ -47,3 +59,17 @@ MemoryV1.3-Breathe is a local personal memory plugin for DeepSeek Harness deskto
 Selected memories can enter the context sent to the model configured in DSH. If that model is remote, its provider’s data handling rules apply to the request.
 
 Start with the [installation and rollback guide](INSTALL.md) and the [public preview ZIP](https://github.com/TeddyHelena/Memory-V1.3-Breathe-1120/releases/tag/v0.16.3%2Bbreathe.1124). The documented test environment is macOS with DSH 0.2.2-rc.5.
+
+### Design principles
+
+| Capability | Behavior |
+| --- | --- |
+| Local-first storage | Markdown and JSON on the user's machine. |
+| Correctable memory | Model-inferred candidates are held for human review by default. |
+| Auditable recall | A local injection ledger records memory delivery. |
+| Reversible decay | Half-life-based tier changes preserve original entries and can be undone. |
+| Memory chains | Related entries can be organized into chains, with recorded operations and rollback support. |
+
+### Contributing
+
+Bug reports, reproducible test cases, documentation improvements and architecture discussions are welcome through [Issues](../../issues) and pull requests. Please remove personal memory data, credentials and sensitive logs before sharing diagnostic evidence.
